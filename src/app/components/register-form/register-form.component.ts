@@ -7,12 +7,21 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatOption } from '@angular/material/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatCardModule } from '@angular/material/card';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 @Component({
   selector: 'app-register-form',
-  imports: [MatFormFieldModule, MatOption, MatSelectModule],
+  imports: [
+    MatFormFieldModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatInput,
+    MatButton,
+  ],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css',
 })
@@ -22,9 +31,9 @@ export class RegisterFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
-      username: new FormControl('username', [Validators.required]),
-      email: new FormControl('email', [Validators.required, Validators.email]), // email validation
-      password: new FormControl('password', [
+      username: new FormControl(null, [Validators.required]),
+      email: new FormControl(null, [Validators.required, Validators.email]), // email validation
+      password: new FormControl(null, [
         Validators.required,
         Validators.minLength(6),
       ]), // password validation

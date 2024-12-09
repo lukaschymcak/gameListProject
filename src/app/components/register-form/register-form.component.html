@@ -1,19 +1,35 @@
 <div class="container">
-  <form action="">
+  <h1>Register</h1>
+  <form action="" class="register-form" [formGroup]="registerForm">
     <mat-form-field>
-      <mat-label>Input</mat-label>
-      <input matInput />
+      <mat-label>User name</mat-label>
+      <input matInput formControlName="username" class="userName" />
+      <mat-hint>Your user name will be used as login name</mat-hint>
+      @if (registerForm.hasError('required', 'username')) {
+      <mat-error>User name is required</mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Select</mat-label>
-      <mat-select>
-        <mat-option value="one">First option</mat-option>
-        <mat-option value="two">Second option</mat-option>
-      </mat-select>
+      <mat-label>Email</mat-label>
+      <input type="email" matInput formControlName="email" />
+      @if (registerForm.hasError('email','email') &&
+      !registerForm.hasError('required', 'email')) {
+      <mat-error>Please enter a valid email address</mat-error>
+      } @if (registerForm.hasError('required', 'email')) {
+      <mat-error>Email is <strong>required</strong></mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Textarea</mat-label>
-      <textarea matInput></textarea>
+      <mat-label>Password</mat-label>
+      <input type="password" matInput formControlName="password" />
+      @if (registerForm.hasError('required', 'password')) {
+      <mat-error>Password required </mat-error>
+      } @if (registerForm.hasError('minlength', 'password')) {
+      <mat-error>Password is <strong>too short</strong></mat-error>
+      }
     </mat-form-field>
+    <button mat-raised-button class="formSubmitButton" type="submit">
+      Register
+    </button>
   </form>
 </div>
