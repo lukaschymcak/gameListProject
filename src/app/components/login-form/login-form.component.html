@@ -1,11 +1,10 @@
 <div class="container">
-  <h1>Register</h1>
-  <form action="" class="register-form" [formGroup]="registerForm">
+  <h1>Login</h1>
+  <form action="" class="register-form" [formGroup]="loginForm">
     <mat-form-field>
       <mat-label>User name</mat-label>
       <input matInput formControlName="username" class="userName" />
-      <mat-hint>Your user name will be used as login name</mat-hint>
-      @if (registerForm.hasError('required', 'username')) {
+      @if (loginForm.hasError('required', 'username')) {
       <mat-error>User name is required</mat-error>
       }
     </mat-form-field>
@@ -13,9 +12,9 @@
     <mat-form-field>
       <mat-label>Password</mat-label>
       <input type="password" matInput formControlName="password" />
-      @if (registerForm.hasError('required', 'password')) {
+      @if (loginForm.hasError('required', 'password')) {
       <mat-error>Password required </mat-error>
-      } @if (registerForm.hasError('minlength', 'password')) {
+      } @if (loginForm.hasError('minlength', 'password')) {
       <mat-error>Password is <strong>too short</strong></mat-error>
       }
     </mat-form-field>
@@ -23,9 +22,12 @@
       mat-raised-button
       class="formSubmitButton"
       type="submit"
-      (click)="register()"
+      (click)="logIn()"
     >
-      Register
+      Log In
     </button>
   </form>
 </div>
+<ng-template #responseMessageTemplate let-param="messageKey">
+  <span [innerHTML]="param"></span>
+</ng-template>

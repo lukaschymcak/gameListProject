@@ -15,7 +15,6 @@ export class ProfilePageComponent {
   userInfo: UserModel = {
     id: 1,
     username: 'test_user',
-    email: '',
     password: '',
     favourites: [],
     description: '',
