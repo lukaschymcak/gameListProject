@@ -12,6 +12,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
+import { AuthServiceService } from '../../services/auth-service.service';
+import { UserModel } from '../../models/UserModel';
 @Component({
   selector: 'app-register-form',
   imports: [
@@ -27,7 +29,8 @@ import { MatButton } from '@angular/material/button';
 })
 export class RegisterFormComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
-  constructor() {}
+  newUser: UserModel = {id: null, username: 'aaa', email: 'aaa', description: null, password: 'aaa', favourites: []};
+  constructor(private authService: AuthServiceService) {}
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
@@ -40,15 +43,22 @@ export class RegisterFormComponent implements OnInit {
     });
   }
 
-  passwordValidator(control: AbstractControl): null | ValidationErrors {
-    const password = control.value;
-    const analysis = zxcvbn(password);
-    if (password?.pristine) {
-      return null;
+  register() {
+    const newUser: UserModel = {
+      id: null,
+      username: this.registerForm.get('username')?.value,
+      email: this.registerForm.get('email')?.value,
+      description: null,
+      password: this.registerForm.get('password')?.value,
+      favourites: [],
     }
-    return null;
+    
+    this.authService.registerUser(newUser).subscribe((response) => {
+      console.log(response);
+    }
+    );
   }
+
+
 }
-function zxcvbn(password: any) {
-  throw new Error('Function not implemented.');
-}
+

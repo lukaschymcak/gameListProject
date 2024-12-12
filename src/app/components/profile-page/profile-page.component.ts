@@ -17,6 +17,7 @@ export class ProfilePageComponent {
     username: 'test_user',
     email: '',
     password: '',
+    favourites: [],
     description: '',
   };
   constructor() {}
