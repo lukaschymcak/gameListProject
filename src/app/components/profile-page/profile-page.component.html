@@ -1,0 +1,113 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="profileTitle col-12">
+      <h1>About you</h1>
+    </div>
+  </div>
+  <!-- User Info And currently playing-->
+  <div class="userInfoAndCurrently row">
+    <div class="profileUserInfo col-md-4">
+      <div class="row">
+        <div class="profileUserImage col-lg-4">
+          <img
+            src="https://via.placeholder.com/150"
+            alt="profile image"
+            id="profileImage"
+          />
+        </div>
+        <div class="profileUserDetails col-lg-8">
+          <p class="userName">YOUR NAME HERE</p>
+          @if ( editingInfo ) {
+          <input
+            type="text"
+            class="form-control"
+            id="descriptionInput"
+            placeholder="Something about you"
+            [(ngModel)]="newDescription"
+          />
+          <button
+            class="btn btn-primary"
+            id="editDescription"
+            (click)="saveInfo()"
+          >
+            Save
+          </button>
+          } @else {
+          <p class="description">
+            {{
+              userInfo.description === ""
+                ? "No description"
+                : userInfo.description
+            }}
+          </p>
+          <button
+            class="btn btn-primary"
+            id="editDescription"
+            (click)="editInfo()"
+          >
+            Edit
+          </button>
+          }
+        </div>
+      </div>
+      <!--START HERE-->
+      <div
+        class="playerFavorites col-md-4 d-flex flex-column justify-content-center align-items-center m-2"
+      >
+        <h2>Favorites</h2>
+        <div class="favoriteGames p-2">
+          <div class="favoriteGame card">
+            <img class="card-img-top" src="https://via.placeholder.com/150" />
+            <div class="card-body">
+              <h4 class="card-title">Witcher 3</h4>
+              <span>Finished</span>
+              <span>Ps5</span>
+            </div>
+          </div>
+          <div class="favoriteGame card">
+            <img class="card-img-top" src="https://via.placeholder.com/150" />
+            <div class="card-body">
+              <h4 class="card-title">Witcher 3</h4>
+              <span>Finished</span>
+              <span>Ps5</span>
+            </div>
+          </div>
+          <div class="favoriteGame card">
+            <img class="card-img-top" src="https://via.placeholder.com/150" />
+            <div class="card-body">
+              <h4 class="card-title">Witcher 3</h4>
+              <span>Finished</span>
+              <span>Ps5</span>
+            </div>
+          </div>
+          <div class="favoriteGame card">
+            <img class="card-img-top" src="https://via.placeholder.com/150" />
+            <div class="card-body">
+              <h4 class="card-title">Witcher 3</h4>
+              <span>Finished</span>
+              <span>Ps5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Disliked And Finished-->
+
+      <div
+        class="playerDisliked col-md-4 d-flex flex-column justify-content-center align-items-center m-2"
+      >
+        <h2>Disliked</h2>
+        <div class="dislikedGames p-2">
+          <div class="dislikedGame card">
+            <img class="card-img-top" src="https://via.placeholder.com/150" />
+            <div class="card-body">
+              <h4 class="card-title">Witcher 3</h4>
+              <span>Finished</span>
+              <span>Ps5</span>
+            </div>
+          </div>
+          <div class="playerFinished col-md-8"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

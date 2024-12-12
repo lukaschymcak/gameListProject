@@ -1,0 +1,25 @@
+.navbar {
+  background-color: #0a1045 !important;
+}
+.nav-link {
+  color: #f9e900 !important;
+  font-size: 1.5rem;
+}
+
+.navbar-brand {
+  color: #f9e900 !important;
+  font-size: 2.5rem;
+}
+#navbarNav {
+  margin-left: 40px;
+}
+.navbar-toggler-icon {
+  color: #f9e900;
+}
+.navbar-toggler {
+  background-color: #f9e900;
+}
+
+.navbar-toggler.collapsed {
+  background-color: #f9e900;
+}
