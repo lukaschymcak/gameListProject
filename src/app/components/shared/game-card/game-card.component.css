@@ -1,26 +1,38 @@
 .gameCard {
   display: inline-block;
   width: auto;
+  height: max-content;
   margin: 10px;
-  height: 200px;
-  max-height: 200px;
+  height: max-content;
+  min-width: 300px;
   border: 3px solid black;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
-
-.row {
-  width: auto;
-  min-width: 470px;
+.gameCard .col-6 {
+  height: max-content;
 }
 .card-title {
   text-wrap: initial;
-  width: 200px;
+  width: auto;
   max-height: 75px;
   overflow: scroll;
 }
-
+.card-body {
+  padding: 0;
+  padding-top: 5px;
+}
 img {
-  width: 100%;
-  height: 194px;
+  width: 101%;
+  height: 100%;
   object-fit: cover;
+}
+.btn:hover {
+  background-color: #0a1045;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .gameCard {
+    height: max-content;
+  }
 }

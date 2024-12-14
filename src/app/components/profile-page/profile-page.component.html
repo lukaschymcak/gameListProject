@@ -1,10 +1,10 @@
 <div class="container-fluid mt-3 m-auto w-auto">
-  <div class="row">
-    <div class="profileTitle col-4">
-      <h1 class="fw-bold m-2 fs-1">About you</h1>
+  <div class="row d-flex align-items-center justify-content-start mb-4">
+    <div class="profileTitle col-md-4">
+      <h1 class="fw-bold m-2 fs-1 mb-md-3">About you</h1>
     </div>
-    <div class="col-8 d-flex flex-row justify-content-start">
-      <div class="buttons">
+    <div class="col-md-8 d-flex justify-content-start topButtons">
+      <div class="buttons ms-lg-5">
         <button
           type="button"
           class="btn btn-primary"
@@ -15,7 +15,7 @@
           Add Game
         </button>
       </div>
-      <div class="buttons">
+      <div class="buttons ms-3">
         <button
           type="button"
           class="btn btn-primary"
@@ -47,11 +47,13 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form>
+          <form [formGroup]="addGameForm">
             <div class="row">
               <div class="col-6">
-                <label for="recipient-name" class="col-form-label">Name:</label>
-                <input type="text" class="form-control" id="recipient-name" />
+                <mat-form-field>
+                  <mat-label>Title:</mat-label>
+                  <input matInput formControlName="title" class="title" />
+                </mat-form-field>
               </div>
               <div class="col-6">
                 <label for="message-text" class="col-form-label">State:</label>
@@ -197,7 +199,9 @@
           class="playerFavorites w-100 col-md-4 d-flex flex-column justify-content-center align-items-center mt-2"
         >
           <h2>Favorites</h2>
-          <div class="favoriteGames gameBox w-100 p-2"></div>
+          <div class="favoriteGames gameBox w-100 p-2">
+            <app-game-card></app-game-card>
+          </div>
         </div>
       </div>
       <!-- Disliked And Finished-->
@@ -206,23 +210,31 @@
           class="playerDisliked w-100 col-md-4 d-flex flex-column justify-content-center align-items-center mt-2"
         >
           <h2>Disliked</h2>
-          <div class="dislikedGames gameBox w-100 p-2"></div>
+          <div class="dislikedGames gameBox w-100 p-2">
+            <app-game-card></app-game-card>
+          </div>
         </div>
       </div>
     </div>
     <div class="gameInfo col-lg-8">
       <div class="row d-flex flex-column p-0 m-auto mb-4">
         <h2 id="gameBoxTitle" class="m-0">Currently Playing</h2>
+        <div class="currentlyPlaying gameBox w-100 p-2">
+          <app-game-card></app-game-card>
+        </div>
       </div>
 
       <div class="row d-flex flex-column p-0 m-auto mb-4">
         <h2 id="gameBoxTitle" class="m-0">Plan on Playing</h2>
-        <div class="dislikedGames gameBox w-100 p-2">
+        <div class="planOnPlaying gameBox w-100 p-2">
           <app-game-card></app-game-card>
         </div>
       </div>
       <div class="row d-flex flex-column p-0 m-auto mb-4">
         <h2 id="gameBoxTitle" class="m-0">Finished Playing</h2>
+        <div class="finishedPlaying gameBox w-100 p-2">
+          <app-game-card></app-game-card>
+        </div>
       </div>
     </div>
   </div>

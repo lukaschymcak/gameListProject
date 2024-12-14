@@ -28,4 +28,14 @@ body {
       supporting-text-font: "Pixelify Sans",
     )
   );
+  @include mat.form-field-overrides(
+    (
+      filled-focus-active-indicator-color: clear,
+      filled-container-shape: rectangle,
+      filled-container-color: white,
+      filled-input-text-color: black,
+      outlined-label-text-font: "Pixelify Sans",
+      container-text-font: "Pixelify Sans",
+    )
+  );
 }
