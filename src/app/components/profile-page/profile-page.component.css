@@ -1,10 +1,30 @@
 * {
   font-family: "Pixelify Sans", sans-serif;
+  color: #0a1045;
 }
 .gameCard {
   display: inline-block;
-  width: 200px;
+  width: auto;
   margin: 10px;
+  height: 200px;
+  max-height: 200px;
+  border: 3px solid black;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.gameBox .row {
+  width: auto;
+}
+.gameBox .card-title {
+  text-wrap: initial;
+  width: 200px;
+  max-height: 75px;
+  overflow: scroll;
+}
+.favoriteGames img {
+  width: 100%;
+  height: 194px;
+  object-fit: cover;
 }
 
 #profileImage {
@@ -23,8 +43,6 @@
   border: 5px solid black;
   color: black;
 }
-.profileUserInfo {
-}
 
 .card-img-top {
   width: 100%;
@@ -34,6 +52,7 @@
 .card-body {
   display: flex;
   flex-direction: column;
+  align-items: self-start;
 }
 
 .gameBox {
@@ -50,5 +69,11 @@
   border-bottom: 0px;
 }
 .gameInfo .row {
-  width: 90%;
+  width: 93%;
+}
+
+@media screen and (max-width: 600px) {
+  .gameInfo .row {
+    width: 100%;
+  }
 }

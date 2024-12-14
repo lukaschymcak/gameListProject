@@ -15,4 +15,12 @@ export class ToastService {
       verticalPosition: 'top',
     });
   }
+  errorToast(message: string, action: string = 'X', duration: number = 3000) {
+    this.matSnack.open(message, action, {
+      duration,
+      panelClass: ['toast-error'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
+  }
 }

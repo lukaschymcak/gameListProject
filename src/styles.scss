@@ -10,7 +10,10 @@ body {
   font-family: "Pixelify Sans", sans-serif;
 }
 .toast-success {
-  --mdc-snackbar-container-color: green;
+  --mdc-snackbar-container-color: #f9e900;
+}
+.toast-error {
+  --mdc-snackbar-container-color: #f90000;
 }
 
 // Customize the entire app. Change :root to your selector if you want to scope the styles.

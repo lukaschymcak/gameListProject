@@ -9,7 +9,7 @@ import { ToastService } from '../../components/shared/toast/toast.service';
   providedIn: 'root',
 })
 export class AuthServiceService {
-  private baseUrl = 'http://localhost:5001';
+  private baseUrl = 'http://localhost:3000/api';
   isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     this.hasToken()
   );
