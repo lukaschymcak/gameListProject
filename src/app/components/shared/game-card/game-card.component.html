@@ -1,17 +1,47 @@
 <div class="gameCard card">
-  <div class="row">
-    <div class="col-5">
-      <img src="https://via.placeholder.com/150" />
+  <div class="row main">
+    <div class="col-5 imgCol">
+      <img [src]="gameCover" />
     </div>
     <div class="col-7">
       <div class="card-body">
-        <h3 class="card-title">Red Dead Redemption 2</h3>
-        <h5 class="card-state">Finished on Ps5</h5>
-        <h5 class="card-text">Rating :</h5>
-        <h5 class="card-buttons w-100">
-          <button class="btn">F</button>
-          <button class="btn">P</button>
-          <button class="btn">P</button>
+        <h5 class="card-buttons top w-100">
+          @if (!profileGame?.isFavorite) {
+          <button class="btn" value="favourite" (click)="addToFavorites()">
+            F
+          </button>
+          }
+
+          <button class="btn" value="disliked">P</button>
+        </h5>
+        <h3 class="card-title">{{ profileGame?.title }}</h3>
+        <h5 class="card-state">{{ profileGame?.state }}</h5>
+        <h5 class="card-text">Rating : {{ profileGame?.rating?.toFixed() }}</h5>
+        <h5 class="card-buttons bottom w-100">
+          <button
+            class="btn"
+            [value]="gameState.Completed"
+            #completed
+            (click)="updateState(completed.value)"
+          >
+            <i class="fa fa-check" aria-hidden="true"></i>
+          </button>
+          <button
+            class="btn"
+            [value]="gameState.Playing"
+            #current
+            (click)="updateState(current.value)"
+          >
+            P
+          </button>
+          <button
+            class="btn"
+            [value]="gameState.PlanToPlay"
+            #plan
+            (click)="updateState(plan.value)"
+          >
+            P
+          </button>
         </h5>
       </div>
     </div>

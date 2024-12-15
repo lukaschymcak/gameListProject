@@ -21,10 +21,6 @@ export class AuthServiceService {
     private toast: ToastService
   ) {}
 
-  registerUser(newUser: UserModel) {
-    return this.httpService.post(`${this.baseUrl}/register`, newUser);
-  }
-
   logUserIn(credentials: { username: string; password: string }) {
     return this.httpService.post(`${this.baseUrl}/login`, credentials).pipe(
       map((res: any) => {

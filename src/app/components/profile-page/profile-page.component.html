@@ -105,11 +105,14 @@
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Add a Game!</h1>
+          <h1 class="modal-title fs-2" id="exampleModalLabel">
+            Search for a Game!
+          </h1>
           <button
+            #closeModal
             type="button"
             class="btn-close"
             data-bs-dismiss="modal"
@@ -118,9 +121,11 @@
         </div>
         <div class="modal-body">
           <form>
-            <div class="row">
-              <div class="col-12">
-                <label for="recipient-name" class="col-form-label">Name:</label>
+            <div class="row d-flex justify-content-center mb-3">
+              <div class="col-6">
+                <label for="recipient-name" class="col-form-label fs-2"
+                  >Name:</label
+                >
                 <input
                   [(ngModel)]="searchForGame"
                   type="text"
@@ -130,9 +135,24 @@
                 />
               </div>
             </div>
+            <div class="row">
+              <div class="gameBox">
+                @for (item of foundGames$ | async; track $index) {
+                <app-game-card
+                  (updateOnSearch)="updateOnSearch()"
+                  [gameID]="item._id"
+                >
+                </app-game-card>
+
+                }
+              </div>
+            </div>
           </form>
         </div>
         <div class="modal-footer">
+          <div class="alert alert-primary" role="alert">
+            A simple primary alert—check it out!
+          </div>
           <button
             type="button"
             class="btn btn-secondary"
@@ -141,7 +161,7 @@
             Close
           </button>
           <button (click)="searchGame()" type="button" class="btn btn-primary">
-            Add
+            Search!
           </button>
         </div>
       </div>
@@ -159,14 +179,14 @@
           />
         </div>
         <div class="profileUserDetails col-sm-8">
-          <p class="fs-2 fw-bold m-0">{{ userInfo.username }}</p>
+          <p class="fs-2 fw-bold m-0">{{ userInfo!.username }}</p>
           @if ( editingInfo ) {
           <input
             type="text"
             class="form-control m-1"
             id="descriptionInput"
-            [innerText]="getInfo().description"
-            [(ngModel)]="newDescription"
+            [innerText]="userInfo!.description"
+            [(ngModel)]="userInfo!.description"
           />
           <button
             class="btn btn-primary m-1"
@@ -178,9 +198,9 @@
           } @else {
           <p class="description fs-5">
             {{
-              userInfo.description === ""
+              userInfo!.description === ""
                 ? "No description"
-                : userInfo.description
+                : userInfo!.description
             }}
           </p>
           <button
@@ -200,7 +220,15 @@
         >
           <h2>Favorites</h2>
           <div class="favoriteGames gameBox w-100 p-2">
-            <app-game-card></app-game-card>
+            @for (item of favoriteGames$ | async; track $index) {
+            <app-game-card
+              (updateGames)="updateGames()"
+              [profile]="true"
+              [gameID]="item._id"
+            >
+            </app-game-card>
+
+            }
           </div>
         </div>
       </div>
@@ -211,7 +239,15 @@
         >
           <h2>Disliked</h2>
           <div class="dislikedGames gameBox w-100 p-2">
-            <app-game-card></app-game-card>
+            @for (item of dislikedGames$ | async; track $index) {
+            <app-game-card
+              (updateGames)="updateGames()"
+              [profile]="true"
+              [gameID]="item._id"
+            >
+            </app-game-card>
+
+            }
           </div>
         </div>
       </div>
@@ -220,20 +256,44 @@
       <div class="row d-flex flex-column p-0 m-auto mb-4">
         <h2 id="gameBoxTitle" class="m-0">Currently Playing</h2>
         <div class="currentlyPlaying gameBox w-100 p-2">
-          <app-game-card></app-game-card>
+          @for (item of currentlyPlaying$ | async; track $index) {
+          <app-game-card
+            (updateGames)="updateGames()"
+            [profile]="true"
+            [gameID]="item._id"
+          >
+          </app-game-card>
+
+          }
         </div>
       </div>
 
       <div class="row d-flex flex-column p-0 m-auto mb-4">
         <h2 id="gameBoxTitle" class="m-0">Plan on Playing</h2>
         <div class="planOnPlaying gameBox w-100 p-2">
-          <app-game-card></app-game-card>
+          @for (item of planToPlay$ | async; track $index) {
+          <app-game-card
+            (updateGames)="updateGames()"
+            [profile]="true"
+            [gameID]="item._id"
+          >
+          </app-game-card>
+
+          }
         </div>
       </div>
       <div class="row d-flex flex-column p-0 m-auto mb-4">
         <h2 id="gameBoxTitle" class="m-0">Finished Playing</h2>
         <div class="finishedPlaying gameBox w-100 p-2">
-          <app-game-card></app-game-card>
+          @for (item of finishedGames$ | async; track $index) {
+          <app-game-card
+            (updateGames)="updateGames()"
+            [profile]="true"
+            [gameID]="item._id"
+          >
+          </app-game-card>
+
+          }
         </div>
       </div>
     </div>

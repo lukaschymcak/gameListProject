@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { AuthServiceService } from '../../services/auth/auth-service.service';
+import { UserDataService } from '../../services/userData/user-data.service';
 import { UserModel } from '../../models/UserModel';
 @Component({
   selector: 'app-register-form',
@@ -31,12 +32,20 @@ export class RegisterFormComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
   newUser: UserModel = {
     id: null,
+    _id: 0,
     username: 'aaa',
     description: null,
     password: 'aaa',
-    favourites: [],
+    favoriteGames: [],
+    dislikedGames: [],
+    currentlyPlaying: [],
+    finishedGames: [],
+    planOnPlaying: [],
   };
-  constructor(private authService: AuthServiceService) {}
+  constructor(
+    private authService: AuthServiceService,
+    private userService: UserDataService
+  ) {}
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
@@ -51,13 +60,18 @@ export class RegisterFormComponent implements OnInit {
   register() {
     const newUser: UserModel = {
       id: null,
+      _id: 0,
       username: this.registerForm.get('username')?.value,
       description: null,
       password: this.registerForm.get('password')?.value,
-      favourites: [],
+      favoriteGames: [],
+      dislikedGames: [],
+      currentlyPlaying: [],
+      finishedGames: [],
+      planOnPlaying: [],
     };
 
-    this.authService.registerUser(newUser).subscribe((response) => {
+    this.userService.registerUser(newUser).subscribe((response) => {
       console.log(response);
     });
   }

@@ -1,38 +1,55 @@
 .gameCard {
   display: inline-block;
-  width: auto;
-  height: max-content;
+  width: 420px;
+  height: 240px;
   margin: 10px;
-  height: max-content;
-  min-width: 300px;
+  min-width: 380px;
+  min-height: 197px;
   border: 3px solid black;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 .gameCard .col-6 {
   height: max-content;
 }
+.imgCol {
+  height: 100%;
+}
+.main {
+  height: 100%;
+}
+.top {
+  padding: 0;
+  margin: 0;
+}
 .card-title {
   text-wrap: initial;
-  width: auto;
-  max-height: 75px;
+  width: 222px;
+  height: 100px;
   overflow: scroll;
+  padding: 3px;
+  max-height: 100px;
 }
 .card-body {
   padding: 0;
   padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+.card-buttons .top {
+  padding: 0;
 }
 img {
   width: 101%;
   height: 100%;
-  object-fit: cover;
+  object-fit: fill;
 }
 .btn:hover {
   background-color: #0a1045;
   color: white;
 }
-
-@media (max-width: 768px) {
-  .gameCard {
-    height: max-content;
-  }
+.gameCard .col-7 {
+  max-width: 320px;
+  height: 100%;
 }

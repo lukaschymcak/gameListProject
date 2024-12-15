@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { UserModel } from '../../models/UserModel';
 import {
   FormControl,
@@ -9,8 +9,9 @@ import {
 import { CommonModule } from '@angular/common';
 import { GameCardComponent } from '../shared/game-card/game-card.component';
 import { UserDataService } from '../../services/userData/user-data.service';
+import { GameDataService } from '../../services/gameData/game-data.service';
 import { ToastService } from '../shared/toast/toast.service';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { NgModel } from '@angular/forms';
 import { ProfileGameModel } from '../../models/ProfileGameModel';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,30 +36,37 @@ import { MatButton } from '@angular/material/button';
   styleUrl: './profile-page.component.css',
 })
 export class ProfilePageComponent implements OnInit {
+  @ViewChild('closeModal') closeModal!: ElementRef;
   editingInfo = false;
   newDescription = '';
   userNamrTest = '';
   searchForGame = '';
   addGameForm: FormGroup = new FormGroup({});
+  foundGames$: Observable<ProfileGameModel[]> = new Observable();
+  favoriteGames$: Observable<ProfileGameModel[]> = new Observable();
+  dislikedGames$: Observable<ProfileGameModel[]> = new Observable();
+  currentlyPlaying$: Observable<ProfileGameModel[]> = new Observable();
+  finishedGames$: Observable<ProfileGameModel[]> = new Observable();
+  planToPlay$: Observable<ProfileGameModel[]> = new Observable();
+  updating: boolean = false;
   gameinfo: ProfileGameModel = {
     id: 1,
+    _id: 1,
     image: 'test',
     title: 'test',
     state: 'test',
     rating: 1,
     platform: 'test',
+    cover: 0,
   };
-  userInfo: UserModel = {
-    id: 1,
-    username: '',
-    password: '',
-    favourites: [],
-    description: '',
-  };
+  userInfo: UserModel | null = null;
   ngOnInit(): void {
-    this.userService.getUserData().subscribe((res) => {
-      this.userInfo = res;
-    });
+    this.getUser();
+    this.favoriteGames$ = this.gameService.getFavorites();
+    this.dislikedGames$ = this.gameService.getDisliked();
+    this.currentlyPlaying$ = this.gameService.getPlaying();
+    this.finishedGames$ = this.gameService.getCompleted();
+    this.planToPlay$ = this.gameService.getPlanToPlay();
     this.addGameForm = new FormGroup({
       title: new FormControl(null, Validators.required),
       state: new FormControl(null, Validators.required),
@@ -68,39 +76,44 @@ export class ProfilePageComponent implements OnInit {
   }
   constructor(
     private userService: UserDataService,
-    private toast: ToastService
+    private toast: ToastService,
+    private gameService: GameDataService
   ) {}
+
+  getUser() {
+    console.log('getting user');
+    this.userService.getUserData().subscribe((user) => {
+      this.userInfo = user;
+    });
+  }
 
   editInfo() {
     this.editingInfo = true;
   }
-  getInfo() {
-    return this.userInfo;
+  refreshUser() {
+    this.userService.refreshUser().subscribe((user) => {
+      this.userInfo = user;
+    });
   }
   saveInfo() {
-    this.userService.updateUserDescription(this.newDescription).subscribe({
-      next: (res) => {
-        this.userInfo = res;
-        this.editingInfo = false;
-      },
-      complete: () => {
-        this.toast.successToast('Description updated', 'X', 2000);
-      },
-      error: (err) => {
-        this.toast.errorToast('Error updating description', 'X', 2000);
-        console.log(err);
-      },
+    this.userService.updateUserDescription(this.userInfo!).subscribe((user) => {
+      this.userInfo = user;
+      this.editingInfo = false;
     });
+  }
+  updateOnSearch() {
+    this.closeModal.nativeElement.click();
+    this.favoriteGames$ = this.gameService.getFavorites();
+    this.dislikedGames$ = this.gameService.getDisliked();
+  }
+  updateGames() {
+    console.log('updating games');
+    this.currentlyPlaying$ = this.gameService.getPlaying();
+    this.finishedGames$ = this.gameService.getCompleted();
+    this.planToPlay$ = this.gameService.getPlanToPlay();
   }
 
   searchGame() {
-    this.userService.searchForGame(this.searchForGame).subscribe({
-      next: (res) => {
-        console.log(res);
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
+    this.foundGames$ = this.gameService.searchForGame(this.searchForGame);
   }
 }
