@@ -37,8 +37,49 @@
   justify-content: center;
   height: 100%;
 }
+.topButtons {
+  margin-left: 4px;
+  width: 100%;
+}
 .card-buttons .top {
   padding: 0;
+}
+.top .btn {
+  margin-right: 6px;
+  border-radius: 10px;
+  background-color: #f9e900;
+  padding: 3px;
+  border: 3px solid black;
+}
+.close {
+  margin-right: 6px;
+  border-radius: 10px;
+  background-color: #f9e900;
+  padding: 3px;
+  border: 3px solid black;
+}
+
+.close img {
+  width: 25px;
+  height: auto;
+}
+.top img {
+  width: 25px;
+  height: auto;
+}
+.bottom {
+  padding: 0;
+}
+.bottom .btn {
+  margin-right: 6px;
+  border-radius: 10px;
+  background-color: #f9e900;
+  padding: 3px;
+  border: 3px solid black;
+}
+.bottom img {
+  width: 25px;
+  height: auto;
 }
 img {
   width: 101%;

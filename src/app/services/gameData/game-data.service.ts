@@ -17,17 +17,26 @@ export class GameDataService {
       title: gameName,
     });
   }
-
+  removeGame(game: ProfileGameModel) {
+    return this.http.put<ProfileGameModel>(`${this.baseUrl}/removeGame`, game);
+  }
   getCoverImage(gameId: number) {
     return this.http.post<CoverModel>(`${this.baseUrl}/getCover`, {
       id: gameId,
     });
   }
 
+  addGame(game: ProfileGameModel) {
+    return this.http.put<ProfileGameModel>(`${this.baseUrl}/addGame`, game);
+  }
+
   addToFavorites(game: ProfileGameModel) {
     return this.http.put<UserModel>(`${this.baseUrl}/addToFavorites`, game);
   }
 
+  addToDisliked(game: ProfileGameModel) {
+    return this.http.put<UserModel>(`${this.baseUrl}/addToDisliked`, game);
+  }
   getGameById(gameId: number) {
     return this.http.post<ProfileGameModel>(`${this.baseUrl}/getGameById`, {
       id: gameId,
@@ -42,37 +51,31 @@ export class GameDataService {
     );
   }
 
-  getFavorites(): Observable<ProfileGameModel[]> {
-    return this.http.get<ProfileGameModel[]>(
-      `${this.baseUrl}/getFavoriteGames`
-    );
+  getFavorites(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/getFavoriteGames`);
   }
 
-  getDisliked(): Observable<ProfileGameModel[]> {
-    return this.http.get<ProfileGameModel[]>(
-      `${this.baseUrl}/getDislikedGames`
-    );
+  getDisliked(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/getDislikedGames`);
   }
 
-  getCompleted(): Observable<ProfileGameModel[]> {
-    return this.http.get<ProfileGameModel[]>(
-      `${this.baseUrl}/getFinishedGames`
-    );
+  getCompleted(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/getFinishedGames`);
   }
 
-  getPlaying(): Observable<ProfileGameModel[]> {
-    return this.http.get<ProfileGameModel[]>(
-      `${this.baseUrl}/getCurrentlyPlayingGames`
-    );
+  getPlaying(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/getCurrentlyPlayingGames`);
   }
 
-  getPlanToPlay(): Observable<ProfileGameModel[]> {
-    return this.http.get<ProfileGameModel[]>(
-      `${this.baseUrl}/getPlanToPlayGames`
-    );
+  getPlanToPlay(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/getPlanToPlayGames`);
   }
 
   updateGame(game: ProfileGameModel) {
     return this.http.put<ProfileGameModel>(`${this.baseUrl}/updateGame`, game);
+  }
+
+  moveGame(game: ProfileGameModel) {
+    return this.http.put<ProfileGameModel>(`${this.baseUrl}/moveGame`, game);
   }
 }

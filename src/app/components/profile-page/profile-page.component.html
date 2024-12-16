@@ -47,22 +47,39 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form [formGroup]="addGameForm">
+          <form
+            [formGroup]="addGameForm"
+            (ngSubmit)="addAGame()"
+            class="was-validated"
+          >
             <div class="row">
               <div class="col-6">
-                <mat-form-field>
-                  <mat-label>Title:</mat-label>
-                  <input matInput formControlName="title" class="title" />
-                </mat-form-field>
+                <label for="recipient-name" class="col-form-label"
+                  >Title:</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="recipient-name"
+                  formControlName="name"
+                  required
+                />
+                <div class="invalid-feedback">Title required.</div>
               </div>
               <div class="col-6">
                 <label for="message-text" class="col-form-label">State:</label>
-                <select class="form-select" aria-label="game state">
-                  <option selected>Open this select menu</option>
-                  <option value="finished">Finished</option>
-                  <option value="playing">Playing</option>
-                  <option value="plan">Plan On</option>
+                <select
+                  class="form-select"
+                  aria-label="game state"
+                  formControlName="state"
+                  required
+                >
+                  <option selected>Choose State!</option>
+                  <option [value]="gameState.Completed">Finished</option>
+                  <option [value]="gameState.Playing">Playing</option>
+                  <option [value]="gameState.PlanToPlay">Plan On</option>
                 </select>
+                <div class="invalid-feedback">Choose a state.</div>
               </div>
             </div>
             <div class="row">
@@ -70,17 +87,29 @@
                 <label for="recipient-name" class="col-form-label"
                   >Platform:</label
                 >
-                <select class="form-select" aria-label="game state">
+                <select
+                  class="form-select"
+                  aria-label="game state"
+                  formControlName="platform"
+                  required
+                >
                   <option selected>Choose</option>
                   <option value="ps">Playstation</option>
                   <option value="pc">PC</option>
                   <option value="xbox">Xbox</option>
                   <option value="switch">Nintendo</option>
                 </select>
+                <div class="invalid-feedback">Choose a platform.</div>
               </div>
               <div class="col-6">
                 <label for="message-text" class="col-form-label">Image:</label>
-                <input type="file" class="form-control" id="gameImage" />
+                <input
+                  type="file"
+                  class="form-control"
+                  id="gameImage"
+                  accept="image/png, image/jpeg"
+                  formControlName="image"
+                />
               </div>
             </div>
           </form>
@@ -93,7 +122,13 @@
           >
             Close
           </button>
-          <button type="button" class="btn btn-primary">Add</button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!this.addGameForm.valid"
+          >
+            Add
+          </button>
         </div>
       </div>
     </div>
@@ -140,6 +175,7 @@
                 @for (item of foundGames$ | async; track $index) {
                 <app-game-card
                   (updateOnSearch)="updateOnSearch()"
+                  [profile]="false"
                   [gameID]="item._id"
                 >
                 </app-game-card>
@@ -218,13 +254,15 @@
         <div
           class="playerFavorites w-100 col-md-4 d-flex flex-column justify-content-center align-items-center mt-2"
         >
-          <h2>Favorites</h2>
+          <h2>
+            <img src="../../../../assets/icons/favorite.png" alt="" />Favorites
+          </h2>
           <div class="favoriteGames gameBox w-100 p-2">
             @for (item of favoriteGames$ | async; track $index) {
             <app-game-card
               (updateGames)="updateGames()"
               [profile]="true"
-              [gameID]="item._id"
+              [gameID]="item"
             >
             </app-game-card>
 
@@ -237,13 +275,15 @@
         <div
           class="playerDisliked w-100 col-md-4 d-flex flex-column justify-content-center align-items-center mt-2"
         >
-          <h2>Disliked</h2>
+          <h2>
+            <img src="../../../../assets/icons/dislike.png" alt="" />Disliked
+          </h2>
           <div class="dislikedGames gameBox w-100 p-2">
             @for (item of dislikedGames$ | async; track $index) {
             <app-game-card
               (updateGames)="updateGames()"
               [profile]="true"
-              [gameID]="item._id"
+              [gameID]="item"
             >
             </app-game-card>
 
@@ -253,14 +293,24 @@
       </div>
     </div>
     <div class="gameInfo col-lg-8">
-      <div class="row d-flex flex-column p-0 m-auto mb-4">
-        <h2 id="gameBoxTitle" class="m-0">Currently Playing</h2>
-        <div class="currentlyPlaying gameBox w-100 p-2">
+      <div
+        class="row d-flex flex-column p-0 m-auto mb-4"
+        (click)="dropDown(currentlyPlaying)"
+      >
+        <h2 id="gameBoxTitle" class="m-0">
+          <img src="../../../../assets/icons/current.png" alt="" />Currently
+          Playing {{ (currentlyPlaying$ | async)?.length }} games
+          <img [src]="buttonImage" alt="" />
+        </h2>
+        <div
+          class="currentlyPlaying gameBox gameBoxDropdown w-100"
+          #currentlyPlaying
+        >
           @for (item of currentlyPlaying$ | async; track $index) {
           <app-game-card
             (updateGames)="updateGames()"
             [profile]="true"
-            [gameID]="item._id"
+            [gameID]="item"
           >
           </app-game-card>
 
@@ -268,28 +318,45 @@
         </div>
       </div>
 
-      <div class="row d-flex flex-column p-0 m-auto mb-4">
-        <h2 id="gameBoxTitle" class="m-0">Plan on Playing</h2>
-        <div class="planOnPlaying gameBox w-100 p-2">
+      <div
+        class="row d-flex flex-column p-0 m-auto mb-4"
+        (click)="dropDown(planOnPlaying)"
+      >
+        <h2 id="gameBoxTitle" class="m-0">
+          <img src="../../../../assets/icons/planOn.png" alt="" />Plan on
+          Playing {{ (planToPlay$ | async)?.length }} games
+          <img [src]="buttonImage" alt="" />
+        </h2>
+        <div class="planOnPlaying gameBox gameBoxDropdown w-100" #planOnPlaying>
           @for (item of planToPlay$ | async; track $index) {
           <app-game-card
             (updateGames)="updateGames()"
             [profile]="true"
-            [gameID]="item._id"
+            [gameID]="item"
           >
           </app-game-card>
 
           }
         </div>
       </div>
-      <div class="row d-flex flex-column p-0 m-auto mb-4">
-        <h2 id="gameBoxTitle" class="m-0">Finished Playing</h2>
-        <div class="finishedPlaying gameBox w-100 p-2">
+      <div
+        class="row d-flex flex-column p-0 m-auto mb-4"
+        (click)="dropDown(finishedPlaying)"
+      >
+        <h2 id="gameBoxTitle" class="m-0">
+          <img src="../../../../assets/icons/finished.png" alt="" />Finished
+          Playing {{ (finishedGames$ | async)?.length }} games
+          <img [src]="buttonImage" alt="" />
+        </h2>
+        <div
+          class="finishedPlaying gameBox gameBoxDropdown w-100"
+          #finishedPlaying
+        >
           @for (item of finishedGames$ | async; track $index) {
           <app-game-card
             (updateGames)="updateGames()"
             [profile]="true"
-            [gameID]="item._id"
+            [gameID]="item"
           >
           </app-game-card>
 

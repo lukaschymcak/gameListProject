@@ -5,15 +5,25 @@
     </div>
     <div class="col-7">
       <div class="card-body">
-        <h5 class="card-buttons top w-100">
-          @if (!profileGame?.isFavorite) {
-          <button class="btn" value="favourite" (click)="addToFavorites()">
-            F
-          </button>
-          }
+        <div class="row topButtons">
+          <div class="card-buttons top col-4">
+            @if (!profileGame?.isFavorite) {
+            <button class="btn" value="favourite" (click)="addToFavorites()">
+              <img src="../../../../assets/icons/favorite.png" alt="" />
+            </button>
+            } @if (!profileGame?.isDisliked) {
+            <button class="btn" value="disliked" (click)="addToDisliked()">
+              <img src="../../../../assets/icons/dislike.png" alt="" />
+            </button>
+            }
+          </div>
+          <div class="col-8 d-flex justify-content-end">
+            <button class="btn close" (click)="removeGame()">
+              <img src="../../../../assets/icons/delete.png" alt="" />
+            </button>
+          </div>
+        </div>
 
-          <button class="btn" value="disliked">P</button>
-        </h5>
         <h3 class="card-title">{{ profileGame?.title }}</h3>
         <h5 class="card-state">{{ profileGame?.state }}</h5>
         <h5 class="card-text">Rating : {{ profileGame?.rating?.toFixed() }}</h5>
@@ -23,24 +33,39 @@
             [value]="gameState.Completed"
             #completed
             (click)="updateState(completed.value)"
+            *ngIf="!profileGame?.isCompleted"
           >
-            <i class="fa fa-check" aria-hidden="true"></i>
+            <img
+              src="../../../../assets/icons/finished.png"
+              alt="Finished Playing"
+              title="Finished Playing"
+            />
           </button>
           <button
             class="btn"
             [value]="gameState.Playing"
             #current
             (click)="updateState(current.value)"
+            *ngIf="!profileGame?.isPlaying"
           >
-            P
+            <img
+              src="../../../../assets/icons/current.png"
+              alt="Currently Playing"
+              title="Currently Playing"
+            />
           </button>
           <button
             class="btn"
             [value]="gameState.PlanToPlay"
             #plan
             (click)="updateState(plan.value)"
+            *ngIf="!profileGame?.isPlanToPlay"
           >
-            P
+            <img
+              src="../../../../assets/icons/planOn.png"
+              alt="Plan to play"
+              title="Plant to play"
+            />
           </button>
         </h5>
       </div>

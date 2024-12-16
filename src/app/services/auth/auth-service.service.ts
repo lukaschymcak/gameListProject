@@ -27,7 +27,7 @@ export class AuthServiceService {
         this.isLoggedIn.next(true);
         localStorage.setItem('token', res.token);
         this.router.navigate(['/profile']);
-        this.toast.successToast('You are now logged in', 'X', 100000);
+        this.toast.successToast('You are now logged in', 'X', 4000);
       })
     );
   }

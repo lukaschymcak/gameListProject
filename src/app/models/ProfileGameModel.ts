@@ -1,6 +1,6 @@
 export interface ProfileGameModel {
   id: number;
-  _id: number;
+  _id?: number;
   title: string;
   state: string;
   rating: number;
