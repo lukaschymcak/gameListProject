@@ -51,11 +51,11 @@ export class ProfilePageComponent implements OnInit {
     image: new FormControl(''),
   });
   foundGames$: Observable<ProfileGameModel[]> = new Observable();
-  favoriteGames$: Observable<number[]> = new Observable();
-  dislikedGames$: Observable<number[]> = new Observable();
-  currentlyPlaying$: Observable<number[]> = new Observable();
+  favoriteGames: number[] = [];
+  dislikedGames: number[] = [];
+  currentlyPlaying: number[] = [];
   allFinishedGames: number[] = [];
-  planToPlay$: Observable<number[]> = new Observable();
+  planToPlay: number[] = [];
   updating: boolean = false;
   gameState = GameState;
   gameinfo: ProfileGameModel = {
@@ -84,6 +84,10 @@ export class ProfilePageComponent implements OnInit {
       console.log(user);
       this.userInfo = user;
       this.allFinishedGames = user.finishedGames;
+      this.favoriteGames = user.favoriteGames;
+      this.dislikedGames = user.dislikedGames;
+      this.currentlyPlaying = user.currentlyPlaying;
+      this.planToPlay = user.planOnPlaying;
     });
   }
   addAGame() {

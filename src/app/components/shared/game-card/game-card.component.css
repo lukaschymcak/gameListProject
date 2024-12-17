@@ -87,7 +87,7 @@ img {
   object-fit: fill;
 }
 .btn:hover {
-  background-color: #0a1045;
+  background-color: red;
   color: white;
 }
 .gameCard .col-7 {
