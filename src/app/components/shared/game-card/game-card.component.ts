@@ -20,9 +20,8 @@ import { Event } from '@angular/router';
 export class GameCardComponent {
   @Input() profile?: Boolean;
   @Input() cover?: number;
-  @Output('updateOnSearch') updateOnSearch: EventEmitter<any> =
-    new EventEmitter();
-  @Output('updateGames') updateGames: EventEmitter<any> = new EventEmitter();
+  @Output() updateOnSearch: EventEmitter<any> = new EventEmitter();
+  @Output() updateGames: EventEmitter<any> = new EventEmitter();
   @Input() gameID?: number;
   gameCover: string = 'https://images.igdb.com/igdb/image/upload/t_cover_big/';
   profileGame: ProfileGameModel | null = null;

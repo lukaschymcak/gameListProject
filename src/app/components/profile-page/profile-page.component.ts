@@ -32,7 +32,6 @@ import { GameState } from '../../utils/gameState';
     MatFormFieldModule,
     MatSelectModule,
     MatCardModule,
-    MatInput,
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.css',
@@ -45,12 +44,17 @@ export class ProfilePageComponent implements OnInit {
   userNamrTest = '';
   searchForGame = '';
   buttonImage: string = '../../../../assets/icons/arrowdown.png';
-  addGameForm: FormGroup = new FormGroup({});
+  addGameForm = new FormGroup({
+    title: new FormControl(null, Validators.required),
+    state: new FormControl(null, Validators.required),
+    platform: new FormControl(null, Validators.required),
+    image: new FormControl(''),
+  });
   foundGames$: Observable<ProfileGameModel[]> = new Observable();
   favoriteGames$: Observable<number[]> = new Observable();
   dislikedGames$: Observable<number[]> = new Observable();
   currentlyPlaying$: Observable<number[]> = new Observable();
-  finishedGames$: Observable<number[]> = new Observable();
+  allFinishedGames: number[] = [];
   planToPlay$: Observable<number[]> = new Observable();
   updating: boolean = false;
   gameState = GameState;
@@ -67,17 +71,6 @@ export class ProfilePageComponent implements OnInit {
   userInfo: UserModel | null = null;
   ngOnInit(): void {
     this.getUser();
-    this.favoriteGames$ = this.gameService.getFavorites();
-    this.dislikedGames$ = this.gameService.getDisliked();
-    this.currentlyPlaying$ = this.gameService.getPlaying();
-    this.finishedGames$ = this.gameService.getCompleted();
-    this.planToPlay$ = this.gameService.getPlanToPlay();
-    this.addGameForm = new FormGroup({
-      title: new FormControl(null, Validators.required),
-      state: new FormControl(null, Validators.required),
-      platform: new FormControl(null, Validators.required),
-      image: new FormControl(''),
-    });
   }
   constructor(
     private userService: UserDataService,
@@ -88,21 +81,25 @@ export class ProfilePageComponent implements OnInit {
   getUser() {
     console.log('getting user');
     this.userService.getUserData().subscribe((user) => {
+      console.log(user);
       this.userInfo = user;
+      this.allFinishedGames = user.finishedGames;
     });
   }
   addAGame() {
     const newGame: ProfileGameModel = {
       id: new Date().getTime(),
-      title: this.addGameForm.get('title')?.value,
-      state: this.addGameForm.get('state')?.value,
+      title: this.addGameForm.get('title')?.value ?? '',
+      state: this.addGameForm.get('state')?.value ?? '',
       rating: 0,
-      platform: this.addGameForm.get('platform')?.value,
+      platform: this.addGameForm.get('platform')?.value ?? '',
       cover: 0,
       image: this.addGameForm.get('image')?.value ?? '',
     };
     this.gameService.addGame(newGame).subscribe({
-      next: (game) => {},
+      next: (game) => {
+        this.updateOnSearch();
+      },
       complete: () => {
         this.updateOnSearch();
         this.toast.successToast('Game added successfully');
@@ -113,11 +110,6 @@ export class ProfilePageComponent implements OnInit {
   editInfo() {
     this.editingInfo = true;
   }
-  refreshUser() {
-    this.userService.refreshUser().subscribe((user) => {
-      this.userInfo = user;
-    });
-  }
   saveInfo() {
     this.userService.updateUserDescription(this.userInfo!).subscribe((user) => {
       this.userInfo = user;
@@ -126,17 +118,11 @@ export class ProfilePageComponent implements OnInit {
   }
   updateOnSearch() {
     this.closeModal.nativeElement.click();
-    this.searchForGame = '';
-    this.favoriteGames$ = this.gameService.getFavorites();
-    this.dislikedGames$ = this.gameService.getDisliked();
-    this.currentlyPlaying$ = this.gameService.getPlaying();
-    this.finishedGames$ = this.gameService.getCompleted();
-    this.planToPlay$ = this.gameService.getPlanToPlay();
+    this.getUser();
   }
   updateGames() {
-    this.currentlyPlaying$ = this.gameService.getPlaying();
-    this.finishedGames$ = this.gameService.getCompleted();
-    this.planToPlay$ = this.gameService.getPlanToPlay();
+    console.log('updating games');
+    this.getUser();
   }
 
   searchGame() {

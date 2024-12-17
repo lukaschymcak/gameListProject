@@ -47,11 +47,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form
-            [formGroup]="addGameForm"
-            (ngSubmit)="addAGame()"
-            class="was-validated"
-          >
+          <form [formGroup]="addGameForm" class="was-validated">
             <div class="row">
               <div class="col-6">
                 <label for="recipient-name" class="col-form-label"
@@ -122,13 +118,7 @@
           >
             Close
           </button>
-          <button
-            type="submit"
-            class="btn btn-primary"
-            [disabled]="!this.addGameForm.valid"
-          >
-            Add
-          </button>
+          <button type="submit" class="btn btn-primary">Add</button>
         </div>
       </div>
     </div>
@@ -345,14 +335,14 @@
       >
         <h2 id="gameBoxTitle" class="m-0">
           <img src="../../../../assets/icons/finished.png" alt="" />Finished
-          Playing {{ (finishedGames$ | async)?.length }} games
+          Playing {{ allFinishedGames.length }} games
           <img [src]="buttonImage" alt="" />
         </h2>
         <div
           class="finishedPlaying gameBox gameBoxDropdown w-100"
           #finishedPlaying
         >
-          @for (item of finishedGames$ | async; track $index) {
+          @for (item of allFinishedGames; track $index) {
           <app-game-card
             (updateGames)="updateGames()"
             [profile]="true"

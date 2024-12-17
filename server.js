@@ -65,19 +65,6 @@ const SECRET_KEY = "skuska";
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET,HEAD,OPTIONS,POST,PUT,DELETE"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-
 mongoose
   .connect(
     "mongodb+srv://chymcakLukas:BznHbFtVPaLOB7I6@cluster0.x71zm.mongodb.net/",
@@ -114,25 +101,24 @@ app.post("/api/login", async (req, res) => {
   const validPassword = await bcrypt.compare(password, user.password);
   if (!validPassword) return res.status(404).send("Password not valid");
 
-  const token = jwt.sign({ _id: user._id }, SECRET_KEY, { expiresIn: 86400 });
+  const token = jwt.sign(
+    { _id: user._id, username: user.username },
+    SECRET_KEY,
+    {
+      expiresIn: 86400,
+    }
+  );
   res.json({ token });
 });
 
 app.get("/api/user", async (req, res) => {
-  let token = "";
-  const authHeader = req.headers["authorization"];
-  if (authHeader && authHeader.startsWith("Bearer ")) {
-    token = authHeader.split(" ")[1];
-    console.log(token); // The actual token part
-  } else {
-    console.log("Authorization header is missing or improperly formatted");
-  }
-  if (!token) return res.status(401).send({ message: "No token provided" });
+  let token = verifyToken(req, res);
 
   jwt.verify(token, SECRET_KEY, async (err, decoded) => {
     if (err) return res.status(401).send({ message: "Unauthorized" });
 
     const user = await User.findById(decoded._id);
+    console.log(user);
 
     if (!user) return res.status(404).send({ message: "User not found" });
     res.json(user);
@@ -204,9 +190,6 @@ app.put("/api/addToFavorites", async (req, res) => {
     const gameExists = await ProfileGame.findOne({ id: req.body.id });
     if (gameExists) {
       if (gameExists.isDisliked) {
-        gameExists.isDisliked = false;
-        gameExists.isFavorite = true;
-        await gameExists.save();
         await user.updateOne({
           $pull: { dislikedGames: gameExists._id },
           $push: { favoriteGames: gameExists._id },
@@ -214,8 +197,6 @@ app.put("/api/addToFavorites", async (req, res) => {
         await user.save();
         res.json(user);
       } else if (!gameExists.isFavorite) {
-        gameExists.isFavorite = true;
-        await gameExists.save();
         await user.updateOne({
           $push: { favoriteGames: gameExists._id },
         });
@@ -237,7 +218,7 @@ app.put("/api/addToFavorites", async (req, res) => {
         $push: { favoriteGames: newProfileGame._id },
       });
       await user.save();
-      res.json(newProfileGame);
+      res.json(user);
     }
   });
 });
@@ -343,6 +324,7 @@ app.put("/api/addGame", async (req, res) => {
         res.status(404).send({ message: err.message });
       }
     }
+    res.json(user);
   });
 });
 
@@ -368,7 +350,7 @@ app.put("/api/removeGame", async (req, res) => {
       },
     });
     await user.save();
-    res.json(result);
+    res.json(user);
   });
 });
 
@@ -478,13 +460,10 @@ app.get("/api/getFavoriteGames", async (req, res) => {
 
     const user = await User.findById(decoded._id);
     if (!user) return res.status(404).send({ message: "User not found" });
-    const favoriteGames = await User.find({}, { favoriteGames: 1, _id: 0 });
-    if (!favoriteGames || favoriteGames.length === 0) {
+    if (!user.favoriteGames || user.favoriteGames.length === 0) {
       return res.status(404).send({ message: "No games found" });
     }
-    const allFavoriteGames = favoriteGames.flatMap(
-      (user) => user.favoriteGames
-    );
+    const allFavoriteGames = favoriteGames.map((game) => game);
 
     res.json(allFavoriteGames);
   });
@@ -498,17 +477,11 @@ app.get("/api/getCurrentlyPlayingGames", async (req, res) => {
 
     const user = await User.findById(decoded._id);
     if (!user) return res.status(404).send({ message: "User not found" });
-    const currentlyPlayingGames = await User.find(
-      {},
-      { currentlyPlaying: 1, _id: 0 }
-    );
-    if (!currentlyPlayingGames || currentlyPlayingGames.length === 0) {
+    if (!user.currentlyPlaying || user.currentlyPlaying.length === 0) {
       return res.status(404).send({ message: "No games found" });
     }
-    const allCurrentlyPlayingGames = currentlyPlayingGames.flatMap(
-      (user) => user.currentlyPlaying
-    );
-    res.json(allCurrentlyPlayingGames);
+
+    res.json(user.currentlyPlaying);
   });
 });
 
@@ -520,14 +493,10 @@ app.get("/api/getFinishedGames", async (req, res) => {
 
     const user = await User.findById(decoded._id);
     if (!user) return res.status(404).send({ message: "User not found" });
-    const finishedGames = await User.find({}, { finishedGames: 1, _id: 0 });
-    if (!finishedGames || finishedGames.length === 0) {
+    if (!user.finishedGames || user.finishedGames.length === 0) {
       return res.status(404).send({ message: "No games found" });
     }
-    const allFinishedGames = finishedGames.flatMap(
-      (user) => user.finishedGames
-    );
-    res.json(allFinishedGames);
+    res.json(user.finishedGames);
   });
 });
 
@@ -539,12 +508,10 @@ app.get("/api/getPlanToPlayGames", async (req, res) => {
 
     const user = await User.findById(decoded._id);
     if (!user) return res.status(404).send({ message: "User not found" });
-    const planToPlay = await User.find({}, { planOnPlaying: 1, _id: 0 });
-    if (!planToPlay || planToPlay.length === 0) {
+    if (!user.planToPlay || user.planToPlay.length === 0) {
       return res.status(404).send({ message: "No games found" });
     }
-    const allPlanToPlay = planToPlay.flatMap((user) => user.planOnPlaying);
-    res.json(allPlanToPlay);
+    res.json(user.planToPlay);
   });
 });
 
@@ -560,11 +527,7 @@ app.get("/api/getDislikedGames", async (req, res) => {
     if (!dislikedGames || dislikedGames.length === 0) {
       return res.status(404).send({ message: "No games found" });
     }
-    const allDislikedGames = dislikedGames.flatMap(
-      (user) => user.dislikedGames
-    );
-
-    res.json(allDislikedGames);
+    res.json(user.dislikedGames);
   });
 });
 app.put("/api/updateGame", async (req, res) => {
@@ -592,7 +555,7 @@ app.post("/api/getGameById", async (req, res) => {
   const { id } = req.body;
   try {
     const game = await Game.findById(id);
-    if (!game) return res.status(404).send({ message: Game.length });
+    if (!game) return res.status(404).send({ message: "Game not found" });
     res.json(game);
   } catch (err) {
     res.status(404).send({ message: err.message });
@@ -610,11 +573,9 @@ app.post("/api/getProfileGameById", async (req, res) => {
   }
 });
 function verifyToken(req, res, next) {
-  let token = "";
   const authHeader = req.headers["authorization"];
   if (authHeader && authHeader.startsWith("Bearer ")) {
-    token = authHeader.split(" ")[1];
-    console.log(token);
+    let token = authHeader.split(" ")[1];
     return token;
   } else {
     console.log("Authorization header is missing or improperly formatted");

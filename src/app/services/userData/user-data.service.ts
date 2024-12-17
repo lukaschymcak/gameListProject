@@ -22,15 +22,11 @@ export class UserDataService {
     );
   }
   getUserData() {
-    if (this.currentUserSubject) {
-      return of(this.currentUserSubject);
-    } else {
-      return this.http.get<UserModel>(`${this.baseUrl}/user`).pipe(
-        tap((user) => {
-          this.currentUserSubject = user;
-        })
-      );
-    }
+    return this.http.get<UserModel>(`${this.baseUrl}/user`).pipe(
+      tap((user) => {
+        this.currentUserSubject = user;
+      })
+    );
   }
 
   updateUserDescription(user: UserModel): Observable<UserModel> {

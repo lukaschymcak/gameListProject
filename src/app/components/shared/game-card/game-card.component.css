@@ -3,13 +3,13 @@
   width: 420px;
   height: 240px;
   margin: 10px;
-  min-width: 380px;
-  min-height: 197px;
+  min-width: 460px;
+  min-height: 275px;
   border: 3px solid black;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 .gameCard .col-6 {
-  height: max-content;
+  height: 100%;
 }
 .imgCol {
   height: 100%;
@@ -23,10 +23,10 @@
 }
 .card-title {
   text-wrap: initial;
-  width: 222px;
+  width: 200px;
   height: 100px;
   overflow: scroll;
-  padding: 3px;
+  padding-top: 5px;
   max-height: 100px;
 }
 .card-body {
