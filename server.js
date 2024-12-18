@@ -105,7 +105,7 @@ app.post("/api/login", async (req, res) => {
     { _id: user._id, username: user.username },
     SECRET_KEY,
     {
-      expiresIn: 86400,
+      expiresIn: "24h",
     }
   );
   res.json({ token });
@@ -151,8 +151,10 @@ app.post("/api/search", async (req, res) => {
     const user = await User.findById(decoded._id);
     if (!user) return res.status(404).send({ message: "User not found" });
     const games = await Game.find({
-      title: { $regex: title, $options: "i" },
-    }).limit(20);
+      title: { $regex: `^${title}`, $options: "i" },
+    })
+      .limit(20)
+      .sort({ rating: -1 });
     if (!games || games.length === 0) {
       return res.status(404).send({ message: "No games found" });
     }
@@ -504,6 +506,15 @@ function verifyToken(req, res, next) {
     return "";
   }
 }
+
+app.get("/api/verifyToken", async (req, res) => {
+  let token = verifyToken(req, res);
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+    if (err) res.status(401).send({ message: "Unauthorized" });
+    res.json(decoded);
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

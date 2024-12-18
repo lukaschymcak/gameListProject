@@ -21,6 +21,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { GameState } from '../../utils/gameState';
+import { AuthServiceService } from '../../services/auth/auth-service.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -75,13 +76,12 @@ export class ProfilePageComponent implements OnInit {
   constructor(
     private userService: UserDataService,
     private toast: ToastService,
-    private gameService: GameDataService
+    private gameService: GameDataService,
+    private authService: AuthServiceService
   ) {}
 
   getUser() {
-    console.log('getting user');
     this.userService.getUserData().subscribe((user) => {
-      console.log(user);
       this.userInfo = user;
       this.allFinishedGames = user.finishedGames;
       this.favoriteGames = user.favoriteGames;

@@ -27,13 +27,40 @@ export class AuthServiceService {
         this.isLoggedIn.next(true);
         localStorage.setItem('token', res.token);
         this.router.navigate(['/profile']);
-        this.toast.successToast('You are now logged in', 'X', 4000);
+        this.toast.successToast('You are now logged in', 'X', 100000);
       })
     );
   }
 
   private hasToken() {
     return !!localStorage.getItem('token');
+  }
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.log('No token found');
+      return false;
+    }
+
+    try {
+      this.httpService.get(`${this.baseUrl}/verifyToken`).subscribe({
+        next: (res) => {
+          return res;
+        },
+        error: (err) => {
+          console.log(err);
+          this.logUserOut();
+          this.router.navigate(['/login']);
+          console.log('Token expired');
+        },
+      });
+      return true;
+    } catch (error) {
+      console.log('Error decoding token');
+      this.logUserOut();
+      this.router.navigate(['/login']);
+      return false;
+    }
   }
 
   logUserOut() {
@@ -42,4 +69,7 @@ export class AuthServiceService {
     this.router.navigate(['/login']);
     alert('You are now logged out');
   }
+}
+function jwt_decode(token: string): any {
+  throw new Error('Function not implemented.');
 }

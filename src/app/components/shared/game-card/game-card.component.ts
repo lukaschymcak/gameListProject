@@ -24,6 +24,13 @@ export class GameCardComponent {
   @Output() updateGames: EventEmitter<any> = new EventEmitter();
   @Input() gameID?: number;
   gameCover: string = 'https://images.igdb.com/igdb/image/upload/t_cover_big/';
+  imageArray: string[] = [
+    '../../../../assets/icons/cat.png',
+    '../../../../assets/icons/cat2.jpg',
+    '../../../../assets/icons/cat3.png',
+    '../../../../assets/icons/dog.jpg',
+    '../../../../assets/icons/roblox.jpg',
+  ];
   profileGame: ProfileGameModel | null = null;
   constructor(
     private gameService: GameDataService,
@@ -46,6 +53,10 @@ export class GameCardComponent {
           this.profileGame = game;
           this.gameService.getCoverImage(game.cover).subscribe({
             next: (cover) => {
+              if (cover === null) {
+                let random = Math.floor(Math.random() * this.imageArray.length);
+                this.gameCover = this.imageArray[random];
+              }
               this.gameCover += cover.image_id + '.jpg';
             },
             error: (err) => {
@@ -66,10 +77,14 @@ export class GameCardComponent {
           this.profileGame = game;
           this.gameService.getCoverImage(game.cover).subscribe({
             next: (cover) => {
+              if (cover === null) {
+                let random = Math.floor(Math.random() * this.imageArray.length);
+                this.gameCover = this.imageArray[random];
+              }
               this.gameCover += cover.image_id + '.jpg';
             },
             error: (err) => {
-              console.log(err);
+              this.gameCover += 'co5del.jpg';
             },
           });
         },
