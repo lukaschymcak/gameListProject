@@ -121,12 +121,28 @@ export class ProfilePageComponent implements OnInit {
     });
   }
   updateOnSearch() {
+    console.log('updating games');
     this.closeModal.nativeElement.click();
     this.getUser();
+    if (this.userInfo) {
+      this.allFinishedGames = this.userInfo.finishedGames;
+      this.favoriteGames = this.userInfo.favoriteGames;
+      this.dislikedGames = this.userInfo.dislikedGames;
+      this.currentlyPlaying = this.userInfo.currentlyPlaying;
+      this.planToPlay = this.userInfo.planOnPlaying;
+    }
   }
   updateGames() {
     console.log('updating games');
     this.getUser();
+    this.getUser();
+    if (this.userInfo) {
+      this.allFinishedGames = this.userInfo.finishedGames;
+      this.favoriteGames = this.userInfo.favoriteGames;
+      this.dislikedGames = this.userInfo.dislikedGames;
+      this.currentlyPlaying = this.userInfo.currentlyPlaying;
+      this.planToPlay = this.userInfo.planOnPlaying;
+    }
   }
 
   searchGame() {

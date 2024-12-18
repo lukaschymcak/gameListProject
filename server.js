@@ -163,7 +163,7 @@ app.post("/api/search", async (req, res) => {
       return (
         !profileGames.some((profileGame) => profileGame.id === game.id) &&
         !profileGames.some((profileGame) =>
-          game.title.startsWith(profileGame.title)
+          game.title.includes(profileGame.title)
         )
       );
     });
@@ -379,20 +379,25 @@ app.put("/api/moveGame", async (req, res) => {
         switch (newProfileGame.state) {
           case "Finished":
             newProfileGame.isCompleted = true;
+            await newProfileGame.save();
             await user.updateOne({
               $push: { finishedGames: newProfileGame._id },
             });
             await user.save();
+            res.json(user);
             break;
           case "Playing":
             newProfileGame.isPlaying = true;
+            await newProfileGame.save();
             await user.updateOne({
               $push: { currentlyPlaying: newProfileGame._id },
             });
             await user.save();
+            res.json(user);
             break;
           case "Plan to play":
             newProfileGame.isPlanToPlay = true;
+            await newProfileGame.save();
             await user.updateOne({
               $push: { planOnPlaying: newProfileGame._id },
             });
@@ -407,7 +412,6 @@ app.put("/api/moveGame", async (req, res) => {
     } else {
       switch (game.state) {
         case "Finished":
-          await game.save();
           await user.updateOne({
             $pull: { currentlyPlaying: game._id, planOnPlaying: game._id },
             $push: { finishedGames: game._id },

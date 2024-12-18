@@ -25,8 +25,18 @@
         </div>
 
         <h3 class="card-title">{{ profileGame?.title }}</h3>
-        <h5 class="card-state">{{ profileGame?.state }}</h5>
-        <h5 class="card-text">Rating : {{ profileGame?.rating?.toFixed() }}</h5>
+        <h5 class="card-state">
+          State :
+          {{ profileGame?.state == null ? "Never played" : profileGame?.state }}
+        </h5>
+        <h5 class="card-text">
+          Rating :
+          {{
+            profileGame?.rating?.toFixed() == null
+              ? "Not Rated"
+              : profileGame?.rating?.toFixed()
+          }}
+        </h5>
         <h5 class="card-buttons bottom w-100">
           <button
             class="btn"

@@ -259,6 +259,7 @@
             @for (item of favoriteGames; track $index) {
             <app-game-card
               (updateGames)="updateGames()"
+              (updateOnSearch)="updateOnSearch()"
               [profile]="true"
               [gameID]="item"
             >
@@ -280,6 +281,7 @@
             @for (item of dislikedGames; track $index) {
             <app-game-card
               (updateGames)="updateGames()"
+              (updateOnSearch)="updateOnSearch()"
               [profile]="true"
               [gameID]="item"
             >
@@ -307,6 +309,7 @@
           @for (item of currentlyPlaying; track $index) {
           <app-game-card
             (updateGames)="updateGames()"
+            (updateOnSearch)="updateOnSearch()"
             [profile]="true"
             [gameID]="item"
           >
@@ -329,6 +332,7 @@
           @for (item of planToPlay; track $index) {
           <app-game-card
             (updateGames)="updateGames()"
+            (updateOnSearch)="updateOnSearch()"
             [profile]="true"
             [gameID]="item"
           >
@@ -353,6 +357,7 @@
           @for (item of allFinishedGames; track $index) {
           <app-game-card
             (updateGames)="updateGames()"
+            (updateOnSearch)="updateOnSearch()"
             [profile]="true"
             [gameID]="item"
           >

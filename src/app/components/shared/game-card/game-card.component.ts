@@ -40,7 +40,6 @@ export class GameCardComponent {
     '../../../../assets/cat/uglyBaby.png',
     '../../../../assets/cat/catOld.png',
     '../../../../assets/cat/nuggetSing.gif',
-    '../../../../assets/cat/nuggetSleep.png',
     '../../../../assets/cat/catSinging.gif',
   ];
   profileGame: ProfileGameModel | null = null;
@@ -128,8 +127,8 @@ export class GameCardComponent {
           }
         },
         complete: () => {
-          this.toastService.successToast('Game removed', 'X', 2000);
           this.updateOnSearch.emit();
+          this.toastService.successToast('Game removed', 'X', 2000);
         },
       });
     }
@@ -139,9 +138,7 @@ export class GameCardComponent {
       this.profileGame.isFavorite = true;
       this.profileGame.isDisliked = false;
       this.gameService.addToFavorites(this.profileGame).subscribe({
-        next: (res) => {
-          this.updateOnSearch.emit();
-        },
+        next: (res) => {},
         error: (err) => {
           console.log(err);
           switch (err.status) {
@@ -165,8 +162,8 @@ export class GameCardComponent {
           }
         },
         complete: () => {
-          this.toastService.successToast('Game added to favorites', 'X', 2000);
           this.updateOnSearch.emit();
+          this.toastService.successToast('Game added to favorites', 'X', 2000);
         },
       });
     }
@@ -177,9 +174,7 @@ export class GameCardComponent {
       this.profileGame.isDisliked = true;
       this.profileGame.isFavorite = false;
       this.gameService.addToDisliked(this.profileGame).subscribe({
-        next: (res) => {
-          this.updateOnSearch.emit();
-        },
+        next: (res) => {},
         error: (err) => {
           console.log(err);
           switch (err.status) {
@@ -203,81 +198,45 @@ export class GameCardComponent {
           }
         },
         complete: () => {
-          this.toastService.successToast('Game added to disliked', 'X', 2000);
           this.updateOnSearch.emit();
+          this.toastService.successToast('Game added to disliked', 'X', 2000);
         },
       });
     }
   }
 
   updateState(state: string) {
-    if (this.profile) {
-      if (this.profileGame) {
-        this.profileGame.state = state;
-        console.log(state);
-        switch (state) {
-          case 'Playing':
-            this.profileGame.isPlaying = true;
-            this.profileGame.isPlanToPlay = false;
-            this.profileGame.isCompleted = false;
-            break;
-          case 'Plan to play':
-            this.profileGame.isPlaying = false;
-            this.profileGame.isPlanToPlay = true;
-            this.profileGame.isCompleted = false;
-            break;
-          case 'Finished':
-            this.profileGame.isPlaying = false;
-            this.profileGame.isPlanToPlay = false;
-            this.profileGame.isCompleted = true;
-            break;
-        }
-        this.gameService.updateGame(this.profileGame).subscribe({
-          next: (res) => {
-            this.gameService.moveGame(res).subscribe({
-              next: (res) => {
-                this.updateGames.emit();
-                console.log(res);
-              },
-              complete: () => {
-                this.updateGames.emit();
-              },
-            });
-          },
-          complete: () => {
-            this.updateGames.emit();
-          },
-        });
+    if (this.profileGame) {
+      this.profileGame.state = state;
+      console.log(state);
+      switch (state) {
+        case 'Playing':
+          this.profileGame.isPlaying = true;
+          this.profileGame.isPlanToPlay = false;
+          this.profileGame.isCompleted = false;
+          break;
+        case 'Plan to play':
+          this.profileGame.isPlaying = false;
+          this.profileGame.isPlanToPlay = true;
+          this.profileGame.isCompleted = false;
+          break;
+        case 'Finished':
+          this.profileGame.isPlaying = false;
+          this.profileGame.isPlanToPlay = false;
+          this.profileGame.isCompleted = true;
+          break;
       }
-    } else {
-      if (this.profileGame) {
-        this.profileGame.state = state;
-        switch (state) {
-          case 'Playing':
-            this.profileGame.isPlaying = true;
-            this.profileGame.isPlanToPlay = false;
-            this.profileGame.isCompleted = false;
-            break;
-          case 'Plan to play':
-            this.profileGame.isPlaying = false;
-            this.profileGame.isPlanToPlay = true;
-            this.profileGame.isCompleted = false;
-            break;
-          case 'Finished':
-            this.profileGame.isPlaying = false;
-            this.profileGame.isPlanToPlay = false;
-            this.profileGame.isCompleted = true;
-            break;
-        }
-        this.gameService.moveGame(this.profileGame!).subscribe({
-          next: (res) => {
-            this.updateOnSearch.emit();
-          },
-          complete: () => {
-            this.updateOnSearch.emit();
-          },
-        });
-      }
+      this.gameService.updateGame(this.profileGame).subscribe({
+        next: (res) => {
+          this.gameService.moveGame(res).subscribe({
+            next: (res) => {},
+            complete: () => {
+              this.updateOnSearch.emit();
+            },
+          });
+        },
+        complete: () => {},
+      });
     }
   }
 }
