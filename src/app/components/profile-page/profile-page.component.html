@@ -47,7 +47,11 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form [formGroup]="addGameForm" class="was-validated">
+          <form
+            [formGroup]="addGameForm"
+            class="was-validated"
+            (ngSubmit)="addAGame()"
+          >
             <div class="row">
               <div class="col-6">
                 <label for="recipient-name" class="col-form-label"
@@ -57,7 +61,7 @@
                   type="text"
                   class="form-control"
                   id="recipient-name"
-                  formControlName="name"
+                  formControlName="title"
                   required
                 />
                 <div class="invalid-feedback">Title required.</div>
@@ -70,9 +74,8 @@
                   formControlName="state"
                   required
                 >
-                  <option selected>Choose State!</option>
                   <option [value]="gameState.Completed">Finished</option>
-                  <option [value]="gameState.Playing">Playing</option>
+                  <option selected [value]="gameState.Playing">Playing</option>
                   <option [value]="gameState.PlanToPlay">Plan On</option>
                 </select>
                 <div class="invalid-feedback">Choose a state.</div>
@@ -89,15 +92,14 @@
                   formControlName="platform"
                   required
                 >
-                  <option selected>Choose</option>
-                  <option value="ps">Playstation</option>
+                  <option selected value="ps">Playstation</option>
                   <option value="pc">PC</option>
                   <option value="xbox">Xbox</option>
                   <option value="switch">Nintendo</option>
                 </select>
                 <div class="invalid-feedback">Choose a platform.</div>
               </div>
-              <div class="col-6">
+              <!-- <div class="col-6">
                 <label for="message-text" class="col-form-label">Image:</label>
                 <input
                   type="file"
@@ -106,7 +108,7 @@
                   accept="image/png, image/jpeg"
                   formControlName="image"
                 />
-              </div>
+              </div> -->
             </div>
           </form>
         </div>
@@ -118,7 +120,13 @@
           >
             Close
           </button>
-          <button type="submit" class="btn btn-primary">Add</button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!addGameForm.valid"
+          >
+            Add
+          </button>
         </div>
       </div>
     </div>
@@ -199,7 +207,7 @@
       <div class="row">
         <div class="profileUserImage col-sm-4">
           <img
-            src="https://via.placeholder.com/150"
+            src="../../../assets/cat/cat.png"
             alt="profile image"
             id="profileImage"
           />
@@ -290,7 +298,7 @@
         <h2 id="gameBoxTitle" class="m-0">
           <img src="../../../../assets/icons/current.png" alt="" />Currently
           Playing {{ currentlyPlaying.length }} games
-          <img [src]="buttonImage" alt="" />
+          <img src="../../../assets/icons/menu.png" alt="" />
         </h2>
         <div
           class="currentlyPlaying gameBox gameBoxDropdown w-100"
@@ -315,7 +323,7 @@
         <h2 id="gameBoxTitle" class="m-0">
           <img src="../../../../assets/icons/planOn.png" alt="" />Plan on
           Playing {{ planToPlay.length }} games
-          <img [src]="buttonImage" alt="" />
+          <img src="../../../assets/icons/menu.png" alt="" />
         </h2>
         <div class="planOnPlaying gameBox gameBoxDropdown w-100" #planOnPlaying>
           @for (item of planToPlay; track $index) {
@@ -336,7 +344,7 @@
         <h2 id="gameBoxTitle" class="m-0">
           <img src="../../../../assets/icons/finished.png" alt="" />Finished
           Playing {{ allFinishedGames.length }} games
-          <img [src]="buttonImage" alt="" />
+          <img src="../../../assets/icons/menu.png" alt="" />
         </h2>
         <div
           class="finishedPlaying gameBox gameBoxDropdown w-100"

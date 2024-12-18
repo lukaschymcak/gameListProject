@@ -25,11 +25,23 @@ export class GameCardComponent {
   @Input() gameID?: number;
   gameCover: string = 'https://images.igdb.com/igdb/image/upload/t_cover_big/';
   imageArray: string[] = [
-    '../../../../assets/icons/cat.png',
-    '../../../../assets/icons/cat2.jpg',
-    '../../../../assets/icons/cat3.png',
-    '../../../../assets/icons/dog.jpg',
-    '../../../../assets/icons/roblox.jpg',
+    '../../../../assets/cat/cat.png',
+    '../../../../assets/cat/cat2.jpg',
+    '../../../../assets/cat/cat3.png',
+    '../../../../assets/cat/dog.jpg',
+    '../../../../assets/cat/roblox.jpg',
+    '../../../../assets/cat/catBurp.gif',
+    '../../../../assets/cat/catCantBelieve.png',
+    '../../../../assets/cat/catSad.png',
+    '../../../../assets/cat/CatSerious.png',
+    '../../../../assets/cat/catShocked.png',
+    '../../../../assets/cat/catSuprised.png',
+    '../../../../assets/cat/nugget.png',
+    '../../../../assets/cat/uglyBaby.png',
+    '../../../../assets/cat/catOld.png',
+    '../../../../assets/cat/nuggetSing.gif',
+    '../../../../assets/cat/nuggetSleep.png',
+    '../../../../assets/cat/catSinging.gif',
   ];
   profileGame: ProfileGameModel | null = null;
   constructor(
