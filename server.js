@@ -88,7 +88,7 @@ app.post("/api/register", async (req, res) => {
     const user = new User({ username, password: hashedPassword });
     await user.save();
     res.status(201).send({ message: "User created" });
-    res.json(user);
+
   } catch (err) {
     res.status(409).send({ message: err.message });
   }
