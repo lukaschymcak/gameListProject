@@ -5,6 +5,7 @@
     </div>
     <div class="col-6">
       <div class="card-body">
+        @if (!this.public) {
         <div class="row topButtons">
           <div class="card-buttons top col-4">
             @if (!profileGame?.isFavorite) {
@@ -23,7 +24,7 @@
             </button>
           </div>
         </div>
-
+        }
         <h3 class="card-title">{{ profileGame?.title }}</h3>
         <h5 class="card-state">
           State :
@@ -37,6 +38,7 @@
               : profileGame?.rating?.toFixed()
           }}
         </h5>
+        @if (!this.public) {
         <h5 class="card-buttons bottom w-100">
           <button
             class="btn"
@@ -78,6 +80,7 @@
             />
           </button>
         </h5>
+        }
       </div>
     </div>
   </div>

@@ -20,6 +20,7 @@ import { Event } from '@angular/router';
 export class GameCardComponent {
   @Input() profile?: Boolean;
   @Input() cover?: number;
+  @Input() public?: Boolean;
   @Output() updateOnSearch: EventEmitter<any> = new EventEmitter();
   @Output() updateGames: EventEmitter<any> = new EventEmitter();
   @Input() gameID?: number;
@@ -138,7 +139,9 @@ export class GameCardComponent {
       this.profileGame.isFavorite = true;
       this.profileGame.isDisliked = false;
       this.gameService.addToFavorites(this.profileGame).subscribe({
-        next: (res) => {   this.updateOnSearch.emit();},
+        next: (res) => {
+          this.updateOnSearch.emit();
+        },
         error: (err) => {
           console.log(err);
           switch (err.status) {
@@ -228,22 +231,24 @@ export class GameCardComponent {
           this.profileGame.isPlanToPlay = false;
           this.profileGame.isCompleted = true;
           break;
-      }if (!this.profile){
-      this.gameService.moveGame(this.profileGame).subscribe({
-        next: (res) => {
-          console.log(res)
-          this.gameService.updateGame(res).subscribe({
-            next: (res) => {},
-            complete: () => {
-              this.updateOnSearch.emit();
-            },
-          });
-        },
-        complete: () => {},
-      })} else {
+      }
+      if (!this.profile) {
+        this.gameService.moveGame(this.profileGame).subscribe({
+          next: (res) => {
+            console.log(res);
+            this.gameService.updateGame(res).subscribe({
+              next: (res) => {},
+              complete: () => {
+                this.updateOnSearch.emit();
+              },
+            });
+          },
+          complete: () => {},
+        });
+      } else {
         this.gameService.updateGame(this.profileGame).subscribe({
           next: (res) => {
-            console.log(res)
+            console.log(res);
             this.gameService.moveGame(res).subscribe({
               next: (res) => {},
               complete: () => {
@@ -252,8 +257,7 @@ export class GameCardComponent {
             });
           },
           complete: () => {},
-        })
-        
+        });
       }
     }
   }

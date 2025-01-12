@@ -30,7 +30,7 @@ export class UserDataService {
   }
 
   getUserById(id: string): Observable<UserModel> {
-    return this.http.post<UserModel>(`${this.baseUrl}/getUserById`, id);
+    return this.http.post<UserModel>(`${this.baseUrl}/getUserById`, { id });
   }
 
   updateUserDescription(user: UserModel): Observable<UserModel> {

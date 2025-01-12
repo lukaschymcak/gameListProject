@@ -24,7 +24,6 @@ export class AuthServiceService {
   logUserIn(credentials: { username: string; password: string }) {
     return this.httpService.post(`${this.baseUrl}/login`, credentials).pipe(
       map((res: any) => {
-        console.log("logging in ", res);
         this.isLoggedIn.next(true);
         localStorage.setItem('token', res.token);
         this.router.navigate(['/profile']);
