@@ -33,8 +33,6 @@ const errorMessage = 'User not logged in';
   styleUrl: './login-form.component.css',
 })
 export class LoginFormComponent {
-  @ViewChild('responseMessageTemplate')
-  responseMessageTemplate!: TemplateRef<any>;
   loginForm: FormGroup = new FormGroup({});
 
   credentials = { username: '', password: '' };
@@ -55,8 +53,9 @@ export class LoginFormComponent {
     const credentials = {
       username: this.loginForm.get('username')?.value,
       password: this.loginForm.get('password')?.value,
-    };
+    } 
 
+    if (this.loginForm.valid) {
     this.authService.logUserIn(credentials).subscribe({
       complete: () => {
         console.log('User logged in');
@@ -65,4 +64,5 @@ export class LoginFormComponent {
       error: () => {},
     });
   }
+}
 }

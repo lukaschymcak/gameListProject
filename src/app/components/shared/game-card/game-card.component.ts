@@ -138,7 +138,7 @@ export class GameCardComponent {
       this.profileGame.isFavorite = true;
       this.profileGame.isDisliked = false;
       this.gameService.addToFavorites(this.profileGame).subscribe({
-        next: (res) => {},
+        next: (res) => {   this.updateOnSearch.emit();},
         error: (err) => {
           console.log(err);
           switch (err.status) {
@@ -174,7 +174,9 @@ export class GameCardComponent {
       this.profileGame.isDisliked = true;
       this.profileGame.isFavorite = false;
       this.gameService.addToDisliked(this.profileGame).subscribe({
-        next: (res) => {},
+        next: (res) => {
+          this.updateOnSearch.emit();
+        },
         error: (err) => {
           console.log(err);
           switch (err.status) {
@@ -209,6 +211,7 @@ export class GameCardComponent {
     if (this.profileGame) {
       this.profileGame.state = state;
       console.log(state);
+      console.log(this.profileGame);
       switch (state) {
         case 'Playing':
           this.profileGame.isPlaying = true;
@@ -225,10 +228,11 @@ export class GameCardComponent {
           this.profileGame.isPlanToPlay = false;
           this.profileGame.isCompleted = true;
           break;
-      }
-      this.gameService.updateGame(this.profileGame).subscribe({
+      }if (!this.profile){
+      this.gameService.moveGame(this.profileGame).subscribe({
         next: (res) => {
-          this.gameService.moveGame(res).subscribe({
+          console.log(res)
+          this.gameService.updateGame(res).subscribe({
             next: (res) => {},
             complete: () => {
               this.updateOnSearch.emit();
@@ -236,7 +240,21 @@ export class GameCardComponent {
           });
         },
         complete: () => {},
-      });
+      })} else {
+        this.gameService.updateGame(this.profileGame).subscribe({
+          next: (res) => {
+            console.log(res)
+            this.gameService.moveGame(res).subscribe({
+              next: (res) => {},
+              complete: () => {
+                this.updateOnSearch.emit();
+              },
+            });
+          },
+          complete: () => {},
+        })
+        
+      }
     }
   }
 }

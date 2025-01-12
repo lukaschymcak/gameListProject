@@ -105,7 +105,7 @@ app.post("/api/login", async (req, res) => {
     { _id: user._id, username: user.username },
     SECRET_KEY,
     {
-      expiresIn: "24h",
+      expiresIn: "864000",
     }
   );
   res.json({ token });
@@ -192,18 +192,26 @@ app.put("/api/addToFavorites", async (req, res) => {
     const gameExists = await ProfileGame.findOne({ id: req.body.id });
     if (gameExists) {
       if (gameExists.isDisliked) {
+        await gameExists.updateOne({ isFavorite: true });
+        await gameExists.updateOne({ isDisliked: false });
         await user.updateOne({
           $pull: { dislikedGames: gameExists._id },
           $push: { favoriteGames: gameExists._id },
         });
+
+        await gameExists.save();
         await user.save();
-        res.json(user);
+        res.json(gameExists);
       } else if (!gameExists.isFavorite) {
+        await gameExists.updateOne({ isFavorite: true });
+        await gameExists.updateOne({ isDisliked: false });
         await user.updateOne({
           $push: { favoriteGames: gameExists._id },
         });
+       
+        await gameExists.save();
         await user.save();
-        res.json(user);
+        res.json(gameExists);
       } else {
         res.status(409).send({ message: "Game already in favorites" });
       }
@@ -220,7 +228,7 @@ app.put("/api/addToFavorites", async (req, res) => {
         $push: { favoriteGames: newProfileGame._id },
       });
       await user.save();
-      res.json(user);
+      res.json(newProfileGame);
     }
   });
 });
@@ -303,6 +311,7 @@ app.put("/api/addGame", async (req, res) => {
             });
             await newProfileGame.save();
             await user.save();
+            res.json(user);
             break;
           case "Playing":
             newProfileGame.isPlaying = true;
@@ -311,6 +320,7 @@ app.put("/api/addGame", async (req, res) => {
             });
             await newProfileGame.save();
             await user.save();
+            res.json(user);
             break;
           case "Plan to play":
             newProfileGame.isPlanToPlay = true;
@@ -326,7 +336,7 @@ app.put("/api/addGame", async (req, res) => {
         res.status(404).send({ message: err.message });
       }
     }
-    res.json(user);
+
   });
 });
 
@@ -384,7 +394,7 @@ app.put("/api/moveGame", async (req, res) => {
               $push: { finishedGames: newProfileGame._id },
             });
             await user.save();
-            res.json(user);
+            res.json(newProfileGame);
             break;
           case "Playing":
             newProfileGame.isPlaying = true;
@@ -393,7 +403,7 @@ app.put("/api/moveGame", async (req, res) => {
               $push: { currentlyPlaying: newProfileGame._id },
             });
             await user.save();
-            res.json(user);
+            res.json(newProfileGame);
             break;
           case "Plan to play":
             newProfileGame.isPlanToPlay = true;
@@ -403,7 +413,7 @@ app.put("/api/moveGame", async (req, res) => {
             });
             await newProfileGame.save();
             await user.save();
-            res.json(user);
+            res.json(newProfileGame);
             break;
         }
       } catch (err) {
@@ -417,6 +427,7 @@ app.put("/api/moveGame", async (req, res) => {
             $push: { finishedGames: game._id },
           });
           await user.save();
+          res.json(game);
           break;
         case "Playing":
           await user.updateOne({
@@ -427,6 +438,7 @@ app.put("/api/moveGame", async (req, res) => {
             $push: { currentlyPlaying: game._id },
           });
           await user.save();
+          res.json(game);
           break;
         case "Plan to play":
           await user.updateOne({
@@ -437,10 +449,9 @@ app.put("/api/moveGame", async (req, res) => {
             $push: { planOnPlaying: game._id },
           });
           await user.save();
+          res.json(game);
           break;
       }
-      await user.save();
-      res.json(user);
     }
   });
 });
@@ -473,6 +484,7 @@ app.put("/api/updateGame", async (req, res) => {
       { $set: req.body },
       { new: true }
     );
+
     await updateGame.save();
 
     res.json(updateGame);

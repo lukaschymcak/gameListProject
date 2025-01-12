@@ -125,6 +125,7 @@ export class ProfilePageComponent implements OnInit {
     this.closeModal.nativeElement.click();
     this.getUser();
     if (this.userInfo) {
+      console.log('pulling games');
       this.allFinishedGames = this.userInfo.finishedGames;
       this.favoriteGames = this.userInfo.favoriteGames;
       this.dislikedGames = this.userInfo.dislikedGames;
