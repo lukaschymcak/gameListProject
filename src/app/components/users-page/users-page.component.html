@@ -1,0 +1,8 @@
+@for (user of users; track $index) {
+    <div class="user">
+        <div  class="user__name">{{ user.username }}</div>
+        <div class="user__email">{{ user.description }}</div>
+        <a  [routerLink]="['/user/' + user._id]" > TO USER</a>
+    </div>
+
+}

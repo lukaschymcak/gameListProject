@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { default: apicalypseFactory } = require("apicalypse");
 
 const gameSchema = new mongoose.Schema({
   id: { type: String, required: true },
@@ -125,6 +126,18 @@ app.get("/api/user", async (req, res) => {
   });
 });
 
+app.post("/api/getUserById", async (req, res) => {
+  const { id } = req.body;
+  try {
+    const user = await User.findById(id);
+    if (!user) return res.status(404).send({ message: "User not found" });
+    res.json(user);
+  } catch (err) {
+    res.status(404).send({ message: err.message });
+  }
+
+});
+0
 app.put("/api/updateUser", async (req, res) => {
   const { description } = req.body;
   let token = verifyToken(req, res);
@@ -139,6 +152,13 @@ app.put("/api/updateUser", async (req, res) => {
     await user.save();
     res.json(user);
   });
+});
+
+app.get("/api/users", async (req, res) => {
+
+  const users = await User.find();
+  if (!users) return res.status(404).send({ message: "Users not found" });
+  res.json(users);
 });
 
 app.post("/api/search", async (req, res) => {

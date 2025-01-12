@@ -20,6 +20,9 @@
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/profile']" href="#">Profile</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/users']" href="#">Users</a>
+        </li>
       </ul>
       @if ( auth.isLogged$ | async ) {
       <ul class="navbar-nav ms-auto">

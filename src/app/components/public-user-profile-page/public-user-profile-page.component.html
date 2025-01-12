@@ -1,0 +1,152 @@
+
+<div class="container-fluid mt-3 m-auto w-auto">
+    <div class="row d-flex align-items-center justify-content-start mb-4">
+      <div class="profileTitle col-md-4">
+        <h1 class="fw-bold m-2 fs-1 mb-md-3">About the user</h1>
+      </div>
+   
+    </div>
+
+    <!-- User Info And currently playing-->
+    <div class="userInfo row">
+      <div class="profileUserInfo col-lg-4 mb-4">
+        <div class="row">
+          <div class="profileUserImage col-sm-4">
+            <img
+              src="../../../assets/cat/cat.png"
+              alt="profile image"
+              id="profileImage"
+            />
+          </div>
+          <div class="profileUserDetails col-sm-8">
+            <p class="fs-2 fw-bold m-0">{{ userInfo!.username }}</p>
+        
+            <p class="description fs-5">
+              {{
+                userInfo!.description === ""
+                  ? "No description"
+                  : userInfo!.description
+              }}
+            </p>
+       
+            
+          </div>
+        </div>
+        <!--START HERE-->
+        <div class="row">
+          <div
+            class="playerFavorites w-100 col-md-4 d-flex flex-column justify-content-center align-items-center mt-2"
+          >
+            <h2>
+              <img src="../../../../assets/icons/favorite.png" alt="" />Favorites
+            </h2>
+            <div class="favoriteGames gameBox w-100 p-2">
+              @for (item of favoriteGames; track $index) {
+              <app-game-card
+             
+                [profile]="true"
+                [gameID]="item"
+              >
+              </app-game-card>
+  
+              }
+            </div>
+          </div>
+        </div>
+        <!-- Disliked And Finished-->
+        <div class="row">
+          <div
+            class="playerDisliked w-100 col-md-4 d-flex flex-column justify-content-center align-items-center mt-2"
+          >
+            <h2>
+              <img src="../../../../assets/icons/dislike.png" alt="" />Disliked
+            </h2>
+            <div class="dislikedGames gameBox w-100 p-2">
+              @for (item of dislikedGames; track $index) {
+              <app-game-card
+         
+                [profile]="true"
+                [gameID]="item"
+              >
+              </app-game-card>
+  
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="gameInfo col-lg-8">
+        <div
+          class="row d-flex flex-column p-0 m-auto mb-4"
+          (click)="dropDown(currentlyPlayingDiv)"
+        >
+          <h2 id="gameBoxTitle" class="m-0">
+            <img src="../../../../assets/icons/current.png" alt="" />Currently
+            Playing {{ currentlyPlaying.length }} games
+            <img src="../../../assets/icons/menu.png" alt="" />
+          </h2>
+          <div
+            class="currentlyPlaying gameBox gameBoxDropdown w-100"
+            #currentlyPlayingDiv
+          >
+            @for (item of currentlyPlaying; track $index) {
+            <app-game-card
+       
+              [profile]="true"
+              [gameID]="item"
+            >
+            </app-game-card>
+  
+            }
+          </div>
+        </div>
+  
+        <div
+          class="row d-flex flex-column p-0 m-auto mb-4"
+          (click)="dropDown(planOnPlaying)"
+        >
+          <h2 id="gameBoxTitle" class="m-0">
+            <img src="../../../../assets/icons/planOn.png" alt="" />Plan on
+            Playing {{ planToPlay.length }} games
+            <img src="../../../assets/icons/menu.png" alt="" />
+          </h2>
+          <div class="planOnPlaying gameBox gameBoxDropdown w-100" #planOnPlaying>
+            @for (item of planToPlay; track $index) {
+            <app-game-card
+    
+              [profile]="true"
+              [gameID]="item"
+            >
+            </app-game-card>
+  
+            }
+          </div>
+        </div>
+        <div
+          class="row d-flex flex-column p-0 m-auto mb-4"
+          (click)="dropDown(finishedPlaying)"
+        >
+          <h2 id="gameBoxTitle" class="m-0">
+            <img src="../../../../assets/icons/finished.png" alt="" />Finished
+            Playing {{ allFinishedGames.length }} games
+            <img src="../../../assets/icons/menu.png" alt="" />
+          </h2>
+          <div
+            class="finishedPlaying gameBox gameBoxDropdown w-100"
+            #finishedPlaying
+          >
+            @for (item of allFinishedGames; track $index) {
+            <app-game-card
+  
+              [profile]="true"
+              [gameID]="item"
+            >
+            </app-game-card>
+  
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

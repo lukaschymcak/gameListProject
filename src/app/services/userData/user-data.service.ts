@@ -29,6 +29,10 @@ export class UserDataService {
     );
   }
 
+  getUserById(id: string): Observable<UserModel> {
+    return this.http.post<UserModel>(`${this.baseUrl}/getUserById`, id);
+  }
+
   updateUserDescription(user: UserModel): Observable<UserModel> {
     return this.http.put<UserModel>(`${this.baseUrl}/updateUser`, user).pipe(
       tap((user) => {
@@ -43,5 +47,9 @@ export class UserDataService {
         this.currentUserSubject = user;
       })
     );
+  }
+
+  getUsers(): Observable<UserModel[]> {
+    return this.http.get<UserModel[]>(`${this.baseUrl}/users`);
   }
 }
