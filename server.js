@@ -5,6 +5,7 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { default: apicalypseFactory } = require("apicalypse");
+require("dotenv").config();
 
 const gameSchema = new mongoose.Schema({
   id: { type: String, required: true },
@@ -60,20 +61,19 @@ const Cover = mongoose.model("Cover", coverSchema);
 const ProfileGame = mongoose.model("ProfileGame", profileGameSchema);
 
 const app = express();
-const PORT = 3000;
-const SECRET_KEY = "skuska";
+const PORT = process.env.PORT || 3000;
+const SECRET_KEY = process.env.SECRET_KEY;
+const login = process.env.API_KEY;
+const pass = process.env.API_PASS;
 
 app.use(bodyParser.json());
 app.use(cors());
 
 mongoose
-  .connect(
-    "mongodb+srv://chymcakLukas:BznHbFtVPaLOB7I6@cluster0.x71zm.mongodb.net/",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
+  .connect(`mongodb+srv://${login}:${pass}@cluster0.x71zm.mongodb.net/`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
@@ -135,9 +135,8 @@ app.post("/api/getUserById", async (req, res) => {
   } catch (err) {
     res.status(404).send({ message: err.message });
   }
-
 });
-0
+0;
 app.put("/api/updateUser", async (req, res) => {
   const { description } = req.body;
   let token = verifyToken(req, res);
@@ -155,7 +154,6 @@ app.put("/api/updateUser", async (req, res) => {
 });
 
 app.get("/api/users", async (req, res) => {
-
   const users = await User.find();
   if (!users) return res.status(404).send({ message: "Users not found" });
   res.json(users);
@@ -228,7 +226,7 @@ app.put("/api/addToFavorites", async (req, res) => {
         await user.updateOne({
           $push: { favoriteGames: gameExists._id },
         });
-       
+
         await gameExists.save();
         await user.save();
         res.json(gameExists);
@@ -356,7 +354,6 @@ app.put("/api/addGame", async (req, res) => {
         res.status(404).send({ message: err.message });
       }
     }
-
   });
 });
 
@@ -554,3 +551,4 @@ app.get("/api/verifyToken", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+module.exports = app;
