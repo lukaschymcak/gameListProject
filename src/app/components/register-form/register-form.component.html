@@ -24,6 +24,7 @@
       class="formSubmitButton"
       type="submit"
       (click)="register()"
+      [disabled]="!registerForm.valid"
     >
       Register
     </button>

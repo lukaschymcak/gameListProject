@@ -88,7 +88,6 @@ app.post("/api/register", async (req, res) => {
     const user = new User({ username, password: hashedPassword });
     await user.save();
     res.status(201).send({ message: "User created" });
-
   } catch (err) {
     res.status(409).send({ message: err.message });
   }
@@ -100,7 +99,7 @@ app.post("/api/login", async (req, res) => {
   if (!user) return res.status(404).send({ message: "User not found" });
 
   const validPassword = await bcrypt.compare(password, user.password);
-  if (!validPassword) return res.status(404).send("Password not valid");
+  if (!validPassword) return res.status(401).send("Password not valid");
 
   const token = jwt.sign(
     { _id: user._id, username: user.username },
@@ -379,7 +378,7 @@ app.put("/api/removeGame", async (req, res) => {
       },
     });
     await user.save();
-    res.json(user);
+    res.json(result);
   });
 });
 
@@ -483,6 +482,70 @@ app.get("/api/getProfileGames", async (req, res) => {
     if (!user) return res.status(404).send({ message: "User not found" });
     const profileGames = await ProfileGame.find();
     res.json(profileGames);
+  });
+});
+
+app.get("/api/getFinishedGames", async (req, res) => {
+  let token = verifyToken(req, res);
+
+  jwt.verify(token, SECRET_KEY, async (err, decoded) => {
+    if (err) return res.status(401).send({ message: "Unauthorized" });
+
+    const user = await User.findById(decoded._id);
+    if (!user) return res.status(404).send({ message: "User not found" });
+    const finishedGames = user.finishedGames;
+    res.json(finishedGames);
+  });
+});
+
+app.get("/api/getPlayingGames", async (req, res) => {
+  let token = verifyToken(req, res);
+
+  jwt.verify(token, SECRET_KEY, async (err, decoded) => {
+    if (err) return res.status(401).send({ message: "Unauthorized" });
+
+    const user = await User.findById(decoded._id);
+    if (!user) return res.status(404).send({ message: "User not found" });
+    const playingGames = user.currentlyPlaying;
+    res.json(playingGames);
+  });
+});
+app.get("/api/getPlanOnPlayingGames", async (req, res) => {
+  let token = verifyToken(req, res);
+
+  jwt.verify(token, SECRET_KEY, async (err, decoded) => {
+    if (err) return res.status(401).send({ message: "Unauthorized" });
+
+    const user = await User.findById(decoded._id);
+    if (!user) return res.status(404).send({ message: "User not found" });
+    const playingGames = user.planOnPlaying;
+    res.json(playingGames);
+  });
+});
+
+app.get("/api/getFavoriteGames", async (req, res) => {
+  let token = verifyToken(req, res);
+
+  jwt.verify(token, SECRET_KEY, async (err, decoded) => {
+    if (err) return res.status(401).send({ message: "Unauthorized" });
+
+    const user = await User.findById(decoded._id);
+    if (!user) return res.status(404).send({ message: "User not found" });
+    const playingGames = user.favoriteGames;
+    res.json(playingGames);
+  });
+});
+
+app.get("/api/getDislikedGames", async (req, res) => {
+  let token = verifyToken(req, res);
+
+  jwt.verify(token, SECRET_KEY, async (err, decoded) => {
+    if (err) return res.status(401).send({ message: "Unauthorized" });
+
+    const user = await User.findById(decoded._id);
+    if (!user) return res.status(404).send({ message: "User not found" });
+    const playingGames = user.dislikedGames;
+    res.json(playingGames);
   });
 });
 

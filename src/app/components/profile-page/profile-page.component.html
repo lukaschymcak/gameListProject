@@ -256,7 +256,7 @@
             <img src="../../../../assets/icons/favorite.png" alt="" />Favorites
           </h2>
           <div class="favoriteGames gameBox w-100 p-2">
-            @for (item of favoriteGames; track $index) {
+            @for (item of favoriteGames$ | async; track $index) {
             <app-game-card
               (updateGames)="updateGames()"
               (updateOnSearch)="updateOnSearch()"
@@ -278,7 +278,7 @@
             <img src="../../../../assets/icons/dislike.png" alt="" />Disliked
           </h2>
           <div class="dislikedGames gameBox w-100 p-2">
-            @for (item of dislikedGames; track $index) {
+            @for (item of dislikedGames$ | async; track $index) {
             <app-game-card
               (updateGames)="updateGames()"
               (updateOnSearch)="updateOnSearch()"
@@ -299,14 +299,14 @@
       >
         <h2 id="gameBoxTitle" class="m-0">
           <img src="../../../../assets/icons/current.png" alt="" />Currently
-          Playing {{ currentlyPlaying.length }} games
+          Playing {{ userInfo?.currentlyPlaying?.length }} games
           <img src="../../../assets/icons/menu.png" alt="" />
         </h2>
         <div
-          class="currentlyPlaying gameBox gameBoxDropdown w-100"
+          class="currentlyPlaying gameBox gameBoxDropdown w-100 showDropdown"
           #currentlyPlayingDiv
         >
-          @for (item of currentlyPlaying; track $index) {
+          @for (item of currentlyPlaying$ | async; track $index) {
           <app-game-card
             (updateGames)="updateGames()"
             (updateOnSearch)="updateOnSearch()"
@@ -325,11 +325,14 @@
       >
         <h2 id="gameBoxTitle" class="m-0">
           <img src="../../../../assets/icons/planOn.png" alt="" />Plan on
-          Playing {{ planToPlay.length }} games
+          Playing {{ userInfo?.planOnPlaying }} games
           <img src="../../../assets/icons/menu.png" alt="" />
         </h2>
-        <div class="planOnPlaying gameBox gameBoxDropdown w-100" #planOnPlaying>
-          @for (item of planToPlay; track $index) {
+        <div
+          class="planOnPlaying gameBox gameBoxDropdown w-100 showDropdown"
+          #planOnPlaying
+        >
+          @for (item of planToPlay$ | async; track $index) {
           <app-game-card
             (updateGames)="updateGames()"
             (updateOnSearch)="updateOnSearch()"
@@ -347,14 +350,15 @@
       >
         <h2 id="gameBoxTitle" class="m-0">
           <img src="../../../../assets/icons/finished.png" alt="" />Finished
-          Playing {{ allFinishedGames.length }} games
+          Playing {{ userInfo?.finishedGames?.length }} games
           <img src="../../../assets/icons/menu.png" alt="" />
         </h2>
         <div
-          class="finishedPlaying gameBox gameBoxDropdown w-100"
+          class="finishedPlaying gameBox gameBoxDropdown w-100 showDropdown"
+          data-game-state="finishedPlaying"
           #finishedPlaying
         >
-          @for (item of allFinishedGames; track $index) {
+          @for (item of allFinishedGames$ |async; track $index) {
           <app-game-card
             (updateGames)="updateGames()"
             (updateOnSearch)="updateOnSearch()"

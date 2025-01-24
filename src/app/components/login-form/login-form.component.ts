@@ -53,16 +53,10 @@ export class LoginFormComponent {
     const credentials = {
       username: this.loginForm.get('username')?.value,
       password: this.loginForm.get('password')?.value,
-    } 
+    };
 
     if (this.loginForm.valid) {
-    this.authService.logUserIn(credentials).subscribe({
-      complete: () => {
-        console.log('User logged in');
-        this.router.navigate(['/profile']);
-      },
-      error: () => {},
-    });
+      this.authService.logUserIn(credentials);
+    }
   }
-}
 }

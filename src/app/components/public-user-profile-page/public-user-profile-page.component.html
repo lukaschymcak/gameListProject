@@ -38,7 +38,8 @@
           </h2>
           <div class="favoriteGames gameBox w-100 p-2">
             @for (item of favoriteGames; track $index) {
-            <app-game-card [profile]="true" [gameID]="item"> </app-game-card>
+            <app-game-card [profile]="true" [public]="true" [gameID]="item">
+            </app-game-card>
 
             }
           </div>
@@ -95,7 +96,8 @@
         </h2>
         <div class="planOnPlaying gameBox gameBoxDropdown w-100" #planOnPlaying>
           @for (item of planToPlay; track $index) {
-          <app-game-card [profile]="true" [gameID]="item"> </app-game-card>
+          <app-game-card [profile]="true" [public]="true" [gameID]="item">
+          </app-game-card>
 
           }
         </div>

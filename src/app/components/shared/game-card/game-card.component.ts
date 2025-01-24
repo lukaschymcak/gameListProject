@@ -109,9 +109,7 @@ export class GameCardComponent {
   removeGame() {
     if (this.profileGame) {
       this.gameService.removeGame(this.profileGame).subscribe({
-        next: (res) => {
-          this.updateOnSearch.emit();
-        },
+        next: (res) => {},
         error: (err) => {
           console.log(err);
           switch (err.status) {
@@ -128,8 +126,8 @@ export class GameCardComponent {
           }
         },
         complete: () => {
-          this.updateOnSearch.emit();
           this.toastService.successToast('Game removed', 'X', 2000);
+          this.updateGames.emit();
         },
       });
     }

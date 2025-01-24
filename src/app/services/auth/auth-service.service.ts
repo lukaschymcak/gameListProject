@@ -22,14 +22,29 @@ export class AuthServiceService {
   ) {}
 
   logUserIn(credentials: { username: string; password: string }) {
-    return this.httpService.post(`${this.baseUrl}/login`, credentials).pipe(
-      map((res: any) => {
-        this.isLoggedIn.next(true);
-        localStorage.setItem('token', res.token);
-        this.router.navigate(['/profile']);
-        this.toast.successToast('You are now logged in', 'X', 5000);
-      })
-    );
+    return this.httpService
+      .post(`${this.baseUrl}/login`, credentials)
+      .subscribe({
+        next: (res: any) => {
+          this.isLoggedIn.next(true);
+          localStorage.setItem('token', res.token);
+          this.router.navigate(['/profile']);
+          this.toast.successToast('You are now logged in', 'X', 5000);
+        },
+        error: (err) => {
+          switch (err.status) {
+            case 401:
+              this.toast.errorToast('Invalid password', 'X', 5000);
+              break;
+            case 404:
+              this.toast.errorToast('User not found', 'X', 5000);
+              break;
+            default:
+              this.toast.errorToast('An error occurred', 'X', 5000);
+              break;
+          }
+        },
+      });
   }
 
   private hasToken() {

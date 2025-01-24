@@ -52,11 +52,11 @@ export class ProfilePageComponent implements OnInit {
     image: new FormControl(''),
   });
   foundGames$: Observable<ProfileGameModel[]> = new Observable();
-  favoriteGames: number[] = [];
-  dislikedGames: number[] = [];
-  currentlyPlaying: number[] = [];
-  allFinishedGames: number[] = [];
-  planToPlay: number[] = [];
+  favoriteGames$: Observable<number[]> = new Observable();
+  dislikedGames$: Observable<number[]> = new Observable();
+  currentlyPlaying$: Observable<number[]> = new Observable();
+  allFinishedGames$: Observable<number[]> = new Observable();
+  planToPlay$: Observable<number[]> = new Observable();
   updating: boolean = false;
   gameState = GameState;
   gameinfo: ProfileGameModel = {
@@ -72,6 +72,7 @@ export class ProfilePageComponent implements OnInit {
   userInfo: UserModel | null = null;
   ngOnInit(): void {
     this.getUser();
+    this.updateGames();
   }
   constructor(
     private userService: UserDataService,
@@ -83,11 +84,6 @@ export class ProfilePageComponent implements OnInit {
   getUser() {
     this.userService.getUserData().subscribe((user) => {
       this.userInfo = user;
-      this.allFinishedGames = user.finishedGames;
-      this.favoriteGames = user.favoriteGames;
-      this.dislikedGames = user.dislikedGames;
-      this.currentlyPlaying = user.currentlyPlaying;
-      this.planToPlay = user.planOnPlaying;
     });
   }
   addAGame() {
@@ -121,29 +117,26 @@ export class ProfilePageComponent implements OnInit {
     });
   }
   updateOnSearch() {
-    console.log('updating games');
+    console.log('updating games on search');
     this.closeModal.nativeElement.click();
     this.getUser();
     if (this.userInfo) {
       console.log('pulling games');
-      this.allFinishedGames = this.userInfo.finishedGames;
-      this.favoriteGames = this.userInfo.favoriteGames;
-      this.dislikedGames = this.userInfo.dislikedGames;
-      this.currentlyPlaying = this.userInfo.currentlyPlaying;
-      this.planToPlay = this.userInfo.planOnPlaying;
+      this.allFinishedGames$ = this.gameService.getFinishedGames();
+      this.favoriteGames$ = this.gameService.getFavorites();
+      this.dislikedGames$ = this.gameService.getDisliked();
+      this.currentlyPlaying$ = this.gameService.getPlaying();
+      this.planToPlay$ = this.gameService.getPlanToPlay();
     }
   }
   updateGames() {
     console.log('updating games');
     this.getUser();
-    this.getUser();
-    if (this.userInfo) {
-      this.allFinishedGames = this.userInfo.finishedGames;
-      this.favoriteGames = this.userInfo.favoriteGames;
-      this.dislikedGames = this.userInfo.dislikedGames;
-      this.currentlyPlaying = this.userInfo.currentlyPlaying;
-      this.planToPlay = this.userInfo.planOnPlaying;
-    }
+    this.allFinishedGames$ = this.gameService.getFinishedGames();
+    this.favoriteGames$ = this.gameService.getFavorites();
+    this.dislikedGames$ = this.gameService.getDisliked();
+    this.currentlyPlaying$ = this.gameService.getPlaying();
+    this.planToPlay$ = this.gameService.getPlanToPlay();
   }
 
   searchGame() {
@@ -153,6 +146,7 @@ export class ProfilePageComponent implements OnInit {
     if (ref.classList.contains('showDropdown')) {
       this.buttonImage = '../../../../assets/icons/arrowdown.png';
       ref.classList.remove('showDropdown');
+      console.log(ref);
     } else {
       this.buttonImage = '../../../../assets/icons/arrowup.png';
       ref.classList.add('showDropdown');

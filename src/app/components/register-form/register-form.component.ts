@@ -71,8 +71,6 @@ export class RegisterFormComponent implements OnInit {
       planOnPlaying: [],
     };
 
-    this.userService.registerUser(newUser).subscribe((response) => {
-      console.log(response);
-    });
+    this.userService.registerUser(newUser);
   }
 }

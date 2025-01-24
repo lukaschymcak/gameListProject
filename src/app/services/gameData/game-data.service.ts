@@ -64,11 +64,15 @@ export class GameDataService {
   }
 
   getPlaying(): Observable<number[]> {
-    return this.http.get<number[]>(`${this.baseUrl}/getCurrentlyPlayingGames`);
+    return this.http.get<number[]>(`${this.baseUrl}/getPlayingGames`);
   }
 
   getPlanToPlay(): Observable<number[]> {
-    return this.http.get<number[]>(`${this.baseUrl}/getPlanToPlayGames`);
+    return this.http.get<number[]>(`${this.baseUrl}/getPlanOnPlayingGames`);
+  }
+
+  getFinishedGames(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/getFinishedGames`);
   }
 
   updateGame(game: ProfileGameModel) {
