@@ -57,25 +57,19 @@ export class AuthServiceService {
       return false;
     }
 
-    try {
-      this.httpService.get(`${this.baseUrl}/verifyToken`).subscribe({
-        next: (res) => {
-          return res;
-        },
-        error: (err) => {
-          console.log(err);
-          this.logUserOut();
-          this.router.navigate(['/login']);
-          console.log('Token expired');
-        },
-      });
-      return true;
-    } catch (error) {
-      console.log('Error decoding token');
-      this.logUserOut();
-      this.router.navigate(['/login']);
-      return false;
-    }
+    this.httpService.post(`${this.baseUrl}/verifyToken`, { token }).subscribe({
+      next: (res) => {
+        return res;
+      },
+      error: (err) => {
+        console.log(err);
+        this.logUserOut();
+        this.router.navigate(['/login']);
+        console.log('Token expired');
+        return false;
+      },
+    });
+    return true;
   }
 
   logUserOut() {

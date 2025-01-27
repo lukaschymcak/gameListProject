@@ -39,7 +39,6 @@ import { AuthServiceService } from '../../services/auth/auth-service.service';
 })
 export class ProfilePageComponent implements OnInit {
   @ViewChild('closeModal') closeModal!: ElementRef;
-  @ViewChild('finishedGames') finishedGames!: ElementRef;
   editingInfo = false;
   newDescription = '';
   userNamrTest = '';
@@ -99,6 +98,16 @@ export class ProfilePageComponent implements OnInit {
     this.gameService.addGame(newGame).subscribe({
       next: (game) => {
         this.updateOnSearch();
+      },
+      error: (err) => {
+        switch (err.status) {
+          case 409:
+            this.toast.errorToast('Game already exists');
+            break;
+          default:
+            this.toast.errorToast('An error occurred');
+            break;
+        }
       },
       complete: () => {
         this.updateOnSearch();

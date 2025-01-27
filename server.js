@@ -603,8 +603,8 @@ function verifyToken(req, res, next) {
   }
 }
 
-app.get("/api/verifyToken", async (req, res) => {
-  let token = verifyToken(req, res);
+app.post("/api/verifyToken", async (req, res) => {
+  const token = req.body.token;
   jwt.verify(token, SECRET_KEY, (err, decoded) => {
     if (err) res.status(401).send({ message: "Unauthorized" });
     res.json(decoded);

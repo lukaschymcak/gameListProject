@@ -40,6 +40,7 @@
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Add a Game!</h1>
           <button
+            #closeModal
             type="button"
             class="btn-close"
             data-bs-dismiss="modal"
@@ -47,11 +48,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form
-            [formGroup]="addGameForm"
-            class="was-validated"
-            (ngSubmit)="addAGame()"
-          >
+          <form [formGroup]="addGameForm" class="was-validated">
             <div class="row">
               <div class="col-6">
                 <label for="recipient-name" class="col-form-label"
@@ -121,9 +118,10 @@
             Close
           </button>
           <button
-            type="submit"
+            [disabled]="addGameForm.invalid"
+            type="button"
+            (click)="addAGame()"
             class="btn btn-primary"
-            [disabled]="!addGameForm.valid"
           >
             Add
           </button>
@@ -325,7 +323,7 @@
       >
         <h2 id="gameBoxTitle" class="m-0">
           <img src="../../../../assets/icons/planOn.png" alt="" />Plan on
-          Playing {{ userInfo?.planOnPlaying }} games
+          Playing {{ userInfo?.planOnPlaying?.length }} games
           <img src="../../../assets/icons/menu.png" alt="" />
         </h2>
         <div
